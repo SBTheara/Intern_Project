@@ -1,8 +1,10 @@
 package com.example.mysmallproject.controller;
+import com.example.mysmallproject.entity.FileData;
 import com.example.mysmallproject.entity.Products;
+import com.example.mysmallproject.service.FileDataService;
 import com.example.mysmallproject.service.Products_Service;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,48 +23,57 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/products")
-@ValidateOnExecution
-@Validated
 public class Product_Controller {
     @Autowired
     private Products_Service productsService;
-    @PostMapping(value = "/addnew")
-    public ResponseEntity<Products> SaveProducts(
-            @Valid @RequestParam("file") MultipartFile file,
-            @Valid @RequestParam("name")  String name,
-            @Valid @RequestParam("description")String description,
-            @Valid @RequestParam("category_id")int category_id,
-            @Valid @RequestParam("quantity") int quantity,
-            @Valid @RequestParam("price")double price,
-            @Valid @RequestParam("create_at") Date create_at
-        ) throws IOException {
-        return new ResponseEntity<Products>((Products)productsService.SaveProduct(file,name,description,quantity,price,create_at),
+    @Autowired
+    private FileDataService fileDataService;
+    @PostMapping(value = "/addnewproducts",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Products> SaveProducts(@Valid @RequestParam(name = "file") MultipartFile file ,
+                                                 @Valid @ModelAttribute(name = "Products") Products products){
+        try {
+            FileData fileData = fileDataService.uploadFile(file);
+            products.setImage(fileData.getName());
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return new ResponseEntity<>(productsService.SaveProduct(products),
         HttpStatus.CREATED);
     }
     @GetMapping(value = "/getall")
     public ResponseEntity<List<Products>> GetAllProducts(){
         return new ResponseEntity<List<Products>>(productsService.GetAllProducts(),HttpStatus.OK);
     }
+    @GetMapping(value = "/getallproduct/{field}")
+    public ResponseEntity<List<Products>> GetAllProductsBySorting(@PathVariable(name = "field") String field){
+        return new ResponseEntity<List<Products>>(productsService.GetAllProductsBySorting(field),HttpStatus.OK);
+    }
     @GetMapping(value = "images/{image}")
     public ResponseEntity<byte[]> downloadFileFromDB(@PathVariable(name = "image") String filename) throws IOException {
         byte[] imageData= productsService.DownloadImage(filename);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
-    }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Products> UpdateProduct(
-            @PathVariable("id") int id,
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("name")String name,
-            @RequestParam("description")String description,
-            @RequestParam("quantity")int quantity,
-            @RequestParam("price")double price,
-            @RequestParam("create_at") Date create_at
-        ) throws IOException {
-        return new ResponseEntity<Products>(productsService.UpdateProducts(id,file,name,description,quantity,price,create_at),HttpStatus.OK);
     }
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> DeleteProduct(@PathVariable(name = "id") int id){
         productsService.DeleteProducts(id);
         return new ResponseEntity<String>("Delete successfull",HttpStatus.OK);
     }
+    @GetMapping(value = "/{offset}/{pagesize}")
+    public ResponseEntity<Page<Products>> GetProductWithPagination(@PathVariable(name = "offset") int offset ,
+                                                                   @PathVariable(name= "pagesize") int pagesize){
+        return new ResponseEntity<>(productsService.GetProductsByPaginations(offset,pagesize),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{offset}/{pagesize}/{field}")
+    public ResponseEntity<Page<Products>> GetProductWithPaginationAndSort   (@PathVariable(name = "offset") int offset ,
+                                                                            @PathVariable(name= "pagesize") int pagesize,
+                                                                            @PathVariable(name = "field") String field
+
+    ){
+        return new ResponseEntity<>(productsService.GetProductsByPaginationsAndSort(offset,pagesize,field),HttpStatus.OK);
+    }
+
+
+
+
 }

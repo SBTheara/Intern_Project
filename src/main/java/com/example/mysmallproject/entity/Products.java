@@ -1,13 +1,8 @@
 package com.example.mysmallproject.entity;
-
-import com.fasterxml.jackson.databind.DatabindException;
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.*;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import org.springframework.format.annotation.NumberFormat;
 import java.util.Date;
 
 @Entity
@@ -23,20 +18,21 @@ public class Products {
     @Column(name = "product_id")
     private int product_id;
     @NotNull
+    @NotBlank(message = "Please enter the name of the products")
     private String name;
-    @NotNull
-    @NotBlank
+    @Max(value = 100,message = "Can not input more than 100 characters")
     private String description;
+    @Min(value = 1)
+    @NotEmpty
     @NotNull
-    @Size(min = 1,message = "must be equal or more than one")
     private int quantity;
     @NotNull
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
+    @Min(1)
     private double price;
     @NotNull
-    private Date Create_at;
-    @Lob
+    private Date CreateAt;
     @NotNull
-    private byte[] image;
-    private String imageFilePath;
-    private String imageName;
+    @NotBlank
+    private String image;
 }
