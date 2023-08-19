@@ -57,4 +57,20 @@ public class Product_Implement implements Products_Service {
         productRepository.deleteById(id);
     }
 
+//    @Override
+//    public List<Products> SearchProductByID(int id) {
+//        return productRepository.findAllByProduct_id(id);
+//    }
+//
+//    @Override
+//    public List<Products> SearchProductByName(String field) {
+//        return productRepository.findAllByName(field);
+//    }
+
+    @Override
+    public List<Products> SearchProductByNameOrID(String field) {
+        String f = "%"+field+"%";
+        return productRepository.findAllByNameOrProduct_id(field,f);
+    }
+
 }

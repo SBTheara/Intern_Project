@@ -1,8 +1,8 @@
 package com.example.mysmallproject.controller;
-import com.example.mysmallproject.entity.FileData;
 import com.example.mysmallproject.entity.Products;
 import com.example.mysmallproject.service.FileDataService;
 import com.example.mysmallproject.service.Products_Service;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -10,33 +10,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.validation.executable.ValidateOnExecution;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-
+@CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080"})
 @RestController
 @RequestMapping(value = "/products")
+@Validated
 public class Product_Controller {
     @Autowired
     private Products_Service productsService;
     @Autowired
     private FileDataService fileDataService;
-    @PostMapping(value = "/addnewproducts",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Products> SaveProducts(@Valid @RequestParam(name = "file") MultipartFile file ,
-                                                 @Valid @ModelAttribute(name = "Products") Products products){
-        try {
-            FileData fileData = fileDataService.uploadFile(file);
-            products.setImage(fileData.getName());
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+    @PostMapping(value = "/addnewproducts")
+    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products){
         return new ResponseEntity<>(productsService.SaveProduct(products),
         HttpStatus.CREATED);
     }
@@ -72,8 +58,19 @@ public class Product_Controller {
     ){
         return new ResponseEntity<>(productsService.GetProductsByPaginationsAndSort(offset,pagesize,field),HttpStatus.OK);
     }
+//    @GetMapping(value = "/searchByname")
+//    public ResponseEntity<List<Products>> GetProductBySearchName(@RequestParam(value = "query") String field){
+//        return ResponseEntity.ok(productsService.SearchProductByName(field));
+//    }
+//
+//    @GetMapping(value = "/searchByID")
+//    public ResponseEntity<List<Products>> GetProductBySearchID(@RequestParam(value = "query") int id){
+//        return ResponseEntity.ok(productsService.SearchProductByID(id));
+//    }
 
-
-
+    @GetMapping(value = "/search")
+    public ResponseEntity<List<Products>> GetProductBySearchIDOrName(@RequestParam(value = "query") String field){
+        return ResponseEntity.ok(productsService.SearchProductByNameOrID(field));
+    }
 
 }

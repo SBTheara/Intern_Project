@@ -1,16 +1,13 @@
 package com.example.mysmallproject.service;
 
-import com.example.mysmallproject.entity.FileData;
+import com.example.mysmallproject.entity.File_Image;
 import com.example.mysmallproject.repository.FileDataRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.*;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,22 +16,32 @@ import java.util.UUID;
 public class FileDataService {
     @Autowired
     private FileDataRepository fileDataRepository;
-    public FileData uploadFile(MultipartFile file) throws IOException {
-        String randomname = UUID.randomUUID().toString();
+    public File_Image uploadFile(MultipartFile file) throws IOException {
+        String random_name = UUID.randomUUID().toString();
         Path currentDirectoryPath = FileSystems.getDefault().getPath("");
-        String Filename=randomname+file.getOriginalFilename();
+        String Filename=random_name+file.getOriginalFilename();
         String currentDirectoryName = currentDirectoryPath.toAbsolutePath().toString()+"\\images\\";
         String s = currentDirectoryName+Filename;
-        FileData fileData = fileDataRepository.save(FileData.builder()
+        File_Image fileImage = fileDataRepository.save(File_Image.builder()
                 .name(Filename)
                 .type(file.getContentType())
                 .filepath(s).build()
         );
         file.transferTo(new File(s));
-        return fileData;
+        return fileImage;
+    }
+    public void ImageTransfer(String s,MultipartFile file) throws IOException {
+        file.transferTo(new File(s));
+    }
+    public void Deletefile(String filename) throws IOException {
+        Path currentDirectoryPath = FileSystems.getDefault().getPath("");
+        String currentDirectoryName = currentDirectoryPath.toAbsolutePath().toString()+"\\images\\"+filename;
+        Path getpath = Paths.get(currentDirectoryName);
+        Files.delete(getpath);
+        fileDataRepository.deleteFile_ImagesByName(filename);
     }
     public byte[] downloadImage(String filename) throws IOException {
-        Optional<FileData> fileData = fileDataRepository.findByName(filename);
+        Optional<File_Image> fileData = fileDataRepository.findByName(filename);
         String filepath = fileData.get().getFilepath();
         byte[] image = Files.readAllBytes(new File(filepath).toPath());
         return image;

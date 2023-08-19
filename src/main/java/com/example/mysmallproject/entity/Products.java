@@ -2,7 +2,8 @@ package com.example.mysmallproject.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.format.annotation.NumberFormat;
+import org.springframework.validation.annotation.Validated;
+
 import java.util.Date;
 
 @Entity
@@ -12,25 +13,21 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@Validated
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private int product_id;
+    private int id;
     @NotNull
     @NotBlank(message = "Please enter the name of the products")
     private String name;
-    @Max(value = 100,message = "Can not input more than 100 characters")
+    @Size(max = 100,message = "Description allow only 100 characters")
     private String description;
-    @Min(value = 1)
-    @NotEmpty
-    @NotNull
     private int quantity;
-    @NotNull
-    @NumberFormat(style = NumberFormat.Style.NUMBER)
-    @Min(1)
     private double price;
     @NotNull
+    @NotBlank(message = "Please input the date")
     private Date CreateAt;
     @NotNull
     @NotBlank
