@@ -27,7 +27,7 @@ public class Products {
     private int quantity;
     private double price;
     @NotNull
-    @NotBlank(message = "Please input the date")
+//    @NotBlank(message = "Please input the date")
     private Date CreateAt;
     @NotNull
     @NotBlank

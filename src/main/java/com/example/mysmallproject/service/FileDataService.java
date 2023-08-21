@@ -2,20 +2,32 @@ package com.example.mysmallproject.service;
 
 import com.example.mysmallproject.entity.File_Image;
 import com.example.mysmallproject.repository.FileDataRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.xpath.XPath;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.RecursiveTask;
 
 @Service
 public class FileDataService {
     @Autowired
     private FileDataRepository fileDataRepository;
+//    private MultipartFile filed;
+//    private MultipartFile filenull;
+//    private byte[] image;
+//    public MultipartFile post(MultipartFile file) throws IOException {
+//        image=file.getBytes();
+//    }
     public File_Image uploadFile(MultipartFile file) throws IOException {
         String random_name = UUID.randomUUID().toString();
         Path currentDirectoryPath = FileSystems.getDefault().getPath("");
@@ -29,9 +41,6 @@ public class FileDataService {
         );
         file.transferTo(new File(s));
         return fileImage;
-    }
-    public void ImageTransfer(String s,MultipartFile file) throws IOException {
-        file.transferTo(new File(s));
     }
     public void Deletefile(String filename) throws IOException {
         Path currentDirectoryPath = FileSystems.getDefault().getPath("");

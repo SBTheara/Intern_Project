@@ -18,7 +18,6 @@ public interface Products_Service {
     void DeleteProducts(int id);
 //    List<Products> SearchProductByID(int id);
 //    List<Products> SearchProductByName(String field);
-
     List<Products> SearchProductByNameOrID(String field);
 
 }

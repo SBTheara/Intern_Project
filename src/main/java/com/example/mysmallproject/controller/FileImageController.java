@@ -16,9 +16,15 @@ public class FileImageController {
     private FileDataService fileDataService;
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(name = "image") MultipartFile file) throws IOException {
-        File_Image uploadFile =  fileDataService.uploadFile(file);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadFile);
+        fileDataService.uploadFile(file);
+        return ResponseEntity.status(HttpStatus.OK).body(file.getOriginalFilename());
     }
+//    @PostMapping(value = "/postimage")
+//    public ResponseEntity<?> postimage(@RequestParam(name = "image") MultipartFile file){
+//        fileDataService.post(file);
+//        return ResponseEntity.ok("uploaded");
+//    }
+
     @GetMapping("/get/{filename}")
     public ResponseEntity<?> downloadFile(@PathVariable(name = "filename") String filename) throws IOException {
         byte[] img = fileDataService.downloadImage(filename);

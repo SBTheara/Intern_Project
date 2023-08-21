@@ -1,4 +1,5 @@
 package com.example.mysmallproject.controller;
+import com.example.mysmallproject.entity.File_Image;
 import com.example.mysmallproject.entity.Products;
 import com.example.mysmallproject.service.FileDataService;
 import com.example.mysmallproject.service.Products_Service;
@@ -22,7 +23,7 @@ public class Product_Controller {
     @Autowired
     private FileDataService fileDataService;
     @PostMapping(value = "/addnewproducts")
-    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products){
+    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products) throws IOException {
         return new ResponseEntity<>(productsService.SaveProduct(products),
         HttpStatus.CREATED);
     }
