@@ -1,16 +1,14 @@
 package com.example.mysmallproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Date;
-
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
@@ -44,6 +42,7 @@ public class Users {
     @NotBlank(message = "Please input the your type")
     private String type;
     @NotNull
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date create_at;
 
     public Users(String firstname, String lastname, String email, String password, String address, String phone, String type, Date create_at) {

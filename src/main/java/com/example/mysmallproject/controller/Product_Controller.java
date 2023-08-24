@@ -1,11 +1,14 @@
 package com.example.mysmallproject.controller;
 import com.example.mysmallproject.entity.File_Image;
 import com.example.mysmallproject.entity.Products;
+import com.example.mysmallproject.repository.Product_Repository;
 import com.example.mysmallproject.service.FileDataService;
 import com.example.mysmallproject.service.Products_Service;
+import com.example.mysmallproject.specifications.ProductSpecifications;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
-@CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080"})
+
+import static org.springframework.data.jpa.domain.Specification.where;
+
+@CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080","http://127.0.0.1:5500"})
 @RestController
 @RequestMapping(value = "/products")
 @Validated
@@ -22,6 +28,8 @@ public class Product_Controller {
     private Products_Service productsService;
     @Autowired
     private FileDataService fileDataService;
+    @Autowired
+    private Product_Repository productRepository;
     @PostMapping(value = "/addnewproducts")
     public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products) throws IOException {
         return new ResponseEntity<>(productsService.SaveProduct(products),
@@ -35,7 +43,7 @@ public class Product_Controller {
     public ResponseEntity<List<Products>> GetAllProductsBySorting(@PathVariable(name = "field") String field){
         return new ResponseEntity<List<Products>>(productsService.GetAllProductsBySorting(field),HttpStatus.OK);
     }
-    @GetMapping(value = "images/{image}")
+    @GetMapping(value = "/images/{image}")
     public ResponseEntity<byte[]> downloadFileFromDB(@PathVariable(name = "image") String filename) throws IOException {
         byte[] imageData= productsService.DownloadImage(filename);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
@@ -43,7 +51,7 @@ public class Product_Controller {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> DeleteProduct(@PathVariable(name = "id") int id){
         productsService.DeleteProducts(id);
-        return new ResponseEntity<String>("Delete successfull",HttpStatus.OK);
+        return new ResponseEntity<>("Delete successfull",HttpStatus.OK);
     }
     @GetMapping(value = "/{offset}/{pagesize}")
     public ResponseEntity<Page<Products>> GetProductWithPagination(@PathVariable(name = "offset") int offset ,
@@ -69,9 +77,9 @@ public class Product_Controller {
 //        return ResponseEntity.ok(productsService.SearchProductByID(id));
 //    }
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<List<Products>> GetProductBySearchIDOrName(@RequestParam(value = "query") String field){
-        return ResponseEntity.ok(productsService.SearchProductByNameOrID(field));
+    @GetMapping(value = "/search/{field}")
+    public List<Products> GetProductBySearchIDOrName(@PathVariable(value = "field") String field){
+        return productRepository.findAll(where(ProductSpecifications.getallbyfield(field)));
     }
 
 }
