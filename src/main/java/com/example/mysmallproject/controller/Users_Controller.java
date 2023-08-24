@@ -4,7 +4,11 @@ import com.example.mysmallproject.entity.Users;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
 import com.example.mysmallproject.specifications.UserSpacifications;
+import com.example.mysmallproject.utils.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +46,13 @@ public class Users_Controller {
         usersService.deleteUser(id);
         return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
-
-
-    @GetMapping(value = "/get/{field}")
-    public List<Users> GetUserByFirstnameOrLastnameOrEmail(
-            @PathVariable(name = "field") String field/*,
-            @PathVariable(name = "email") String email,
-            @PathVariable(name = "address") String address*/
+    @GetMapping(value = "/get/{field}/{offset}/{pagesize}")
+    public Page<Users> GetUserByFirstnameOrLastnameOrEmail(
+            @PathVariable(name = "field") String field,
+            @PathVariable(name = "offset") int offset,
+            @PathVariable(name = "pagesize") int pagesize
     ){
-        return usersRepository.findAll(where(UserSpacifications.getinfo(field)));
+        Pageable pageable = PageRequest.of(offset,pagesize);
+        return usersRepository.findAll(where(UserSpacifications.search(field)),pageable);
     }
 }

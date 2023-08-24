@@ -10,7 +10,7 @@ public class ProductSpecifications {
     public static Specification<Products> getallbyfield(String field){
         return (root, query, criteriaBuilder) -> criteriaBuilder.or(
                 criteriaBuilder.like(root.get(Products_.NAME),"%"+field+"%"),
-                criteriaBuilder.like(criteriaBuilder.toString(root.get(Products_.PRICE)),field)
+                    criteriaBuilder.like(criteriaBuilder.toString(root.get(Products_.PRICE)),field)
         );
     }
 }

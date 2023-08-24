@@ -1,9 +1,14 @@
 package com.example.mysmallproject.service.implement;
 
+import com.example.mysmallproject.entity.Products;
 import com.example.mysmallproject.entity.Users;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +44,12 @@ public class UsersImplement implements UsersService {
     @Override
     public void deleteUser(int id) {
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Users> GetProductsByPaginations(int offset, int pagesize) {
+        Pageable pageable = PageRequest.of(offset, pagesize);
+        return usersRepository.findAll(pageable);
     }
 
 }

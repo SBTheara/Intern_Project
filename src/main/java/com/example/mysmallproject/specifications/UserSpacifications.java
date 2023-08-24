@@ -1,20 +1,29 @@
 package com.example.mysmallproject.specifications;
+
 import com.example.mysmallproject.entity.Users;
 import com.example.mysmallproject.entity.Users_;
+import com.example.mysmallproject.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-import java.util.Locale;
-
 @Component
 public class UserSpacifications {
-    public static Specification<Users> getinfo(String field){
+    public static Specification<Users> search(String field){
         return (root, query, criteriaBuilder) -> criteriaBuilder.or(
-                    criteriaBuilder.like(root.get(Users_.firstname),"%"+field+"%"),
-                        criteriaBuilder.like(root.get(Users_.lastname),"%"+field+"%"),
-                            criteriaBuilder.like(criteriaBuilder.concat(root.get("firstname"),root.get("lastname")),"%"+field.toUpperCase(Locale.ROOT)+"%"),
-                                criteriaBuilder.like(root.get(Users_.email),"%"+field+"%"),
-                                    criteriaBuilder.like(root.get(Users_.address),"%"+field+"%")
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(Users_.FIRSTNAME)),"%"+field.toUpperCase()+"%"),
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(Users_.LASTNAME)),"%"+field.toUpperCase()+"%"),
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(
+                        criteriaBuilder.concat(root.get(Users_.FIRSTNAME),root.get(Users_.LASTNAME))),"%"+field.replaceAll("\\s","").toUpperCase()+"%"),
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(Users_.EMAIL)),"%"+field.toUpperCase()+"%"),
+                criteriaBuilder.like(
+                        criteriaBuilder.upper(root.get(Users_.ADDRESS)),"%"+field+"%")
         );
-    }
+    };
 }
