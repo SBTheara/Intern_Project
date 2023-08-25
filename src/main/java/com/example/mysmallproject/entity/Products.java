@@ -1,5 +1,6 @@
 package com.example.mysmallproject.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -28,7 +29,6 @@ public class Products {
     private int quantity;
     private double price;
     @NotNull
-//    @NotBlank(message = "Please input the date")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date CreateAt;
     @NotNull

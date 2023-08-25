@@ -5,15 +5,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,15 +48,6 @@ public class Users {
     @NotNull
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date create_at;
-
-    public Users(String firstname, String lastname, String email, String password, String address, String phone, String type, Date create_at) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.phone = phone;
-        this.type = type;
-        this.create_at = create_at;
-    }
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Orders> orders = new ArrayList<>();
 }

@@ -40,16 +40,8 @@ public class UsersImplement implements UsersService {
         usersRepository.save(users);
         return users;
     }
-
     @Override
     public void deleteUser(int id) {
         usersRepository.deleteById(id);
     }
-
-    @Override
-    public Page<Users> GetProductsByPaginations(int offset, int pagesize) {
-        Pageable pageable = PageRequest.of(offset, pagesize);
-        return usersRepository.findAll(pageable);
-    }
-
 }

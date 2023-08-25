@@ -11,11 +11,6 @@ public interface Products_Service {
     List<Products> GetAllProducts();
     Page<Products> GetProductsByPaginations(int offset, int pagesize);
     Page<Products> GetProductsByPaginationsAndSort(int offset, int pagesize,String field);
-    List<Products> GetAllProductsBySorting(String field);
-    byte[] DownloadImage(String filename) throws IOException;
     void DeleteProducts(int id);
-//    List<Products> SearchProductByID(int id);
-//    List<Products> SearchProductByName(String field);
-    List<Products> SearchProductByNameOrID(String field);
 
 }

@@ -19,12 +19,6 @@ public class FileImageController {
         File_Image fileImage= fileDataService.uploadFile(file);
         return ResponseEntity.status(HttpStatus.OK).body(fileImage.getName());
     }
-//    @PostMapping(value = "/postimage")
-//    public ResponseEntity<?> postimage(@RequestParam(name = "image") MultipartFile file){
-//        fileDataService.post(file);
-//        return ResponseEntity.ok("uploaded");
-//    }
-
     @GetMapping("/get/{filename}")
     public ResponseEntity<?> downloadFile(@PathVariable(name = "filename") String filename) throws IOException {
         byte[] img = fileDataService.downloadImage(filename);

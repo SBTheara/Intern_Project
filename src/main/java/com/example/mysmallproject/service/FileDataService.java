@@ -22,29 +22,21 @@ import java.util.concurrent.RecursiveTask;
 public class FileDataService {
     @Autowired
     private FileDataRepository fileDataRepository;
-//    private MultipartFile filed;
-//    private MultipartFile filenull;
-//    private byte[] image;
-//    public MultipartFile post(MultipartFile file) throws IOException {
-//        image=file.getBytes();
-//    }
     public File_Image uploadFile(MultipartFile file) throws IOException {
-        String random_name = UUID.randomUUID().toString();
-        Path currentDirectoryPath = FileSystems.getDefault().getPath("");
-        String Filename=random_name+file.getOriginalFilename();
-        String currentDirectoryName = currentDirectoryPath.toAbsolutePath().toString()+"\\images\\";
-        String s = currentDirectoryName+Filename;
-        File_Image fileImage = fileDataRepository.save(File_Image.builder()
+        Path currentDirectoryPath = FileSystems.getDefault().getPath("");//get current directory
+        String Filename=UUID.randomUUID()+file.getOriginalFilename();// get random characters and combine with the original filename
+        String currentFilename = currentDirectoryPath.toAbsolutePath()+"\\images\\"+Filename;//get path to upload
+        File_Image fileImage = fileDataRepository.save(File_Image.builder() //save data to File_Image object
                 .name(Filename)
                 .type(file.getContentType())
-                .filepath(s).build()
+                .filepath(currentFilename).build()
         );
-        file.transferTo(new File(s));
+        file.transferTo(new File(currentFilename));//transfer file to directory
         return fileImage;
     }
     public void Deletefile(String filename) throws IOException {
         Path currentDirectoryPath = FileSystems.getDefault().getPath("");
-        String currentDirectoryName = currentDirectoryPath.toAbsolutePath().toString()+"\\images\\"+filename;
+        String currentDirectoryName = currentDirectoryPath.toAbsolutePath()+"\\images\\"+filename;
         Path getpath = Paths.get(currentDirectoryName);
         Files.delete(getpath);
         fileDataRepository.deleteFile_ImagesByName(filename);

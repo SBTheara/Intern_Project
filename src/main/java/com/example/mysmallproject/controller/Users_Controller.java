@@ -1,30 +1,23 @@
 package com.example.mysmallproject.controller;
-
 import com.example.mysmallproject.entity.Users;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
 import com.example.mysmallproject.specifications.UserSpacifications;
-import com.example.mysmallproject.utils.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static org.springframework.data.jpa.domain.Specification.where;
-
 @CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080"})
 @RestController
 @RequestMapping(value = "/users")
 public class Users_Controller {
     @Autowired
     private UsersService usersService;
-
     @Autowired
     private UsersRepository usersRepository;
     @PostMapping(value = "/addnewUsers")
@@ -40,19 +33,30 @@ public class Users_Controller {
         usersService.updateUsers(user,id);
         return new ResponseEntity<>("Update successful",HttpStatus.OK);
     }
-
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteUsers(@PathVariable(name = "id") int id){
         usersService.deleteUser(id);
         return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
-    @GetMapping(value = "/get/{field}/{offset}/{pagesize}")
-    public Page<Users> GetUserByFirstnameOrLastnameOrEmail(
-            @PathVariable(name = "field") String field,
-            @PathVariable(name = "offset") int offset,
-            @PathVariable(name = "pagesize") int pagesize
+    @GetMapping(value = "/search")
+    public Page<Users> Search(
+            @RequestParam(name = "field") String field,
+            @RequestParam(name = "offset") int offset,
+            @RequestParam(name = "pagesize",required = false,defaultValue = "5") int pagesize
     ){
         Pageable pageable = PageRequest.of(offset,pagesize);
         return usersRepository.findAll(where(UserSpacifications.search(field)),pageable);
+    }
+    @GetMapping(value = "/filter")
+    public List<Users>  filter (@RequestParam(name = "field",required = false) String field,
+                                @RequestParam(name = "search",required = false) String search)
+    {
+        if(field.isEmpty()&&search.isEmpty()){
+            return usersRepository.findAll();
+        }else if(field.isEmpty()){
+            return usersRepository.findAll(where(UserSpacifications.search(search)));
+        }else {
+            return usersRepository.findAll(where(UserSpacifications.filter(field, search)));
+        }
     }
 }

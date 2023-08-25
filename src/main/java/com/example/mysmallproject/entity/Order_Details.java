@@ -13,5 +13,10 @@ public class Order_Details {
     private int order_id;
     private int product_id;
     private int quantity;
-
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="order_id", insertable=false, updatable=false)
+    private Orders orders;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="product_id", insertable=false, updatable=false)
+    private Products products;
 }

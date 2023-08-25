@@ -35,35 +35,9 @@ public class Product_Implement implements Products_Service {
     public Page<Products> GetProductsByPaginationsAndSort(int offset, int pagesize, String field) {
         return productRepository.findAll(PageRequest.of(offset,pagesize).withSort(Sort.by(field)));
     }
-
-    @Override
-    public List<Products> GetAllProductsBySorting(String field) {
-        return productRepository.findAllBySorting(field);
-    }
-
-    @Override
-    public byte[] DownloadImage(String filename) throws IOException {
-        return new byte[0];
-    }
     @Override
     public void DeleteProducts(int id) {
         productRepository.deleteById(id);
-    }
-
-//    @Override
-//    public List<Products> SearchProductByID(int id) {
-//        return productRepository.findAllByProduct_id(id);
-//    }
-//
-//    @Override
-//    public List<Products> SearchProductByName(String field) {
-//        return productRepository.findAllByName(field);
-//    }
-
-    @Override
-    public List<Products> SearchProductByNameOrID(String field) {
-        String f = "%"+field+"%";
-        return productRepository.findAllByNameOrProduct_id(field,f);
     }
 
 }

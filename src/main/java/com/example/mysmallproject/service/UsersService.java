@@ -11,5 +11,4 @@ public interface UsersService {
     List<Users> getUsers();
     Users updateUsers(Users user,int id);
     void deleteUser(int id);
-    Page<Users> GetProductsByPaginations(int offset, int pagesize);
 }
