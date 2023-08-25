@@ -1,8 +1,6 @@
 package com.example.mysmallproject.entity;
-
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Date;
 @Entity
 @Table(name = "orders")

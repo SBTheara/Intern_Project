@@ -1,13 +1,10 @@
 package com.example.mysmallproject.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
-
 import java.util.Date;
-
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
