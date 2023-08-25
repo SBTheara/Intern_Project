@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,16 +48,16 @@ public class Users_Controller {
         Pageable pageable = PageRequest.of(offset,pagesize);
         return usersRepository.findAll(where(UserSpacifications.search(field)),pageable);
     }
-    @GetMapping(value = "/filter")
-    public List<Users>  filter (@RequestParam(name = "field",required = false) String field,
-                                @RequestParam(name = "search",required = false) String search)
+    @GetMapping(value = "/filterAndSearch")
+    public Page<Users>  filter (
+            @RequestParam(name = "address",required = false) String address,
+            @RequestParam(name = "type",required = false) String type,
+            @RequestParam(name = "search",required = false) String search,
+            @RequestParam(name = "offset",required = false) int offset,
+            @RequestParam(name = "pagesize",required = false) int pagesize
+    )
     {
-        if(field.isEmpty()&&search.isEmpty()){
-            return usersRepository.findAll();
-        }else if(field.isEmpty()){
-            return usersRepository.findAll(where(UserSpacifications.search(search)));
-        }else {
-            return usersRepository.findAll(where(UserSpacifications.filter(field, search)));
-        }
+        Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,"firstname"));
+            return usersRepository.findAll(where(UserSpacifications.filterAndSearch(address,type,search)),pageable);
     }
 }
