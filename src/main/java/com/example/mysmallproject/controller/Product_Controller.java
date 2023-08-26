@@ -75,16 +75,24 @@ public class Product_Controller {
     }
     @GetMapping(value = "/filter",consumes = {MediaType.ALL_VALUE})
     public Page<Products> filter(
-            @RequestParam(value = "field",required = false) String field,
-            @RequestParam(value = "offset",required = false) int offset,
-            @RequestParam(value = "pagesize",required = false) int pagesize
+
+            @RequestParam(name = "minPrice",required = false,defaultValue = "0") String minPrice,
+            @RequestParam(name = "maxPrice",required = false,defaultValue = "0") String maxPrice,
+            @RequestParam(name = "search",required = false) String search,
+            @RequestParam(name = "sortby",required = false,defaultValue = "name") String sortby,
+            @RequestParam(name = "offset",required = false,defaultValue = "0") int offset,
+            @RequestParam(name = "pagesize",required = false,defaultValue = "10") int pagesize
     )
     {
-        Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC));
-        if(field.isEmpty()){
+        Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,sortby));
+        if(minPrice.equals("0")&&maxPrice.equals("0")){
             return productRepository.findAll(pageable);
-        }else {
-            return productRepository.findAll(where(ProductSpecifications.filter(field)), pageable);
+        }
+        if(maxPrice.equals("0")){
+            return productRepository.findAll(ProductSpecifications.filterMin(minPrice,search),pageable);
+        }
+        else {
+            return productRepository.findAll(ProductSpecifications.filterMaxAndMin(minPrice, maxPrice, search), pageable);
         }
     }
 }

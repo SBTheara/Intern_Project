@@ -14,20 +14,26 @@ public class ProductSpecifications {
                     criteriaBuilder.like(criteriaBuilder.toString(root.get("price")),field)
         );
     }
-    public static Specification<Products> filter(String field){
-        switch(field) {
-            case "LOW" -> {
-                return (root, query, criteriaBuilder) -> criteriaBuilder.le(root.get("price"), 10000);
-            }
-            case "MEDIUM" -> {
-                return (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("price"), 10000, 30000);
-            }
-            case "HIGH" -> {
-                return (root, query, criteriaBuilder) -> criteriaBuilder.ge(root.get("price"), 30000);
-            }
-            default -> {
-                return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
-            }
+    public static Specification<Products> filterMaxAndMin(String minPrice,String maxPrice ,String search){
+        if(minPrice!=null && maxPrice!=null &&search!=null){
+            return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                    criteriaBuilder.and(
+                            criteriaBuilder.between(root.get("price"),minPrice,maxPrice),
+                            criteriaBuilder.like(criteriaBuilder.upper(root.get("name")),"%"+search.replaceAll("\\s","").toUpperCase()+"%"))
+            );
+        }else {
+            return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+        }
+    }
+    public static Specification<Products> filterMin(String minPrice,String search){
+        if (minPrice!=null){
+            return (root, query, criteriaBuilder) -> criteriaBuilder.or(
+                    criteriaBuilder.and(
+                            criteriaBuilder.ge(root.get("price"),Double.parseDouble(minPrice)),
+                            criteriaBuilder.like(criteriaBuilder.upper(root.get("name")),"%"+search.replaceAll("\\s","").toUpperCase()+"%"))
+            );
+        }else {
+            return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
         }
     }
 }

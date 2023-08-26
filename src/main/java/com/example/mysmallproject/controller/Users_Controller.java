@@ -39,25 +39,26 @@ public class Users_Controller {
         usersService.deleteUser(id);
         return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
-    @GetMapping(value = "/search")
-    public Page<Users> Search(
-            @RequestParam(name = "field") String field,
-            @RequestParam(name = "offset") int offset,
-            @RequestParam(name = "pagesize",required = false,defaultValue = "5") int pagesize
-    ){
-        Pageable pageable = PageRequest.of(offset,pagesize);
-        return usersRepository.findAll(where(UserSpacifications.search(field)),pageable);
-    }
+//    @GetMapping(value = "/search")
+//    public Page<Users> Search(
+//            @RequestParam(name = "field") String field,
+//            @RequestParam(name = "offset") int offset,
+//            @RequestParam(name = "pagesize",required = false,defaultValue = "5") int pagesize
+//    ){
+//        Pageable pageable = PageRequest.of(offset,pagesize);
+//        return usersRepository.findAll(where(UserSpacifications.search(field)),pageable);
+//    }
     @GetMapping(value = "/filterAndSearch")
     public Page<Users>  filter (
             @RequestParam(name = "address",required = false) String address,
             @RequestParam(name = "type",required = false) String type,
             @RequestParam(name = "search",required = false) String search,
-            @RequestParam(name = "offset",required = false) int offset,
-            @RequestParam(name = "pagesize",required = false) int pagesize
+            @RequestParam(name = "sortby",required = false,defaultValue = "firstname") String sortby,
+            @RequestParam(name = "offset",required = false,defaultValue = "0") int offset,
+            @RequestParam(name = "pagesize",required = false,defaultValue = "10") int pagesize
     )
     {
-        Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,"firstname"));
+        Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,sortby));
             return usersRepository.findAll(where(UserSpacifications.filterAndSearch(address,type,search)),pageable);
     }
 }
