@@ -1,7 +1,5 @@
 package com.example.mysmallproject.specifications;
 import com.example.mysmallproject.entity.Users;
-import jakarta.persistence.criteria.Order;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 @Component

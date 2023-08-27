@@ -1,5 +1,6 @@
 package com.example.mysmallproject.service.implement;
 
+import com.example.mysmallproject.Exception.ApiRequestException;
 import com.example.mysmallproject.entity.Products;
 import com.example.mysmallproject.entity.Users;
 import com.example.mysmallproject.repository.UsersRepository;
@@ -25,10 +26,14 @@ public class UsersImplement implements UsersService {
     public List<Users> getUsers(){
         return usersRepository.findAll();
     }
+
+    @Override
+    public Users getUserById(int id) {
+        return usersRepository.findById(id).orElseThrow(()->new ApiRequestException("Not found for this user"));
+    }
     @Override
     public Users updateUsers(Users user, int id) {
-        usersRepository.findById(id);
-        Users users = new Users();
+        Users users = usersRepository.findById(id).orElseThrow(()->new ApiRequestException("Not found for this user"));
         users.setFirstname(user.getFirstname());
         users.setLastname(user.getLastname());
         users.setEmail(user.getEmail());

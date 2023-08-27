@@ -1,4 +1,5 @@
 package com.example.mysmallproject.controller;
+import com.example.mysmallproject.entity.File_Image;
 import com.example.mysmallproject.entity.Products;
 import com.example.mysmallproject.repository.Product_Repository;
 import com.example.mysmallproject.service.FileDataService;
@@ -15,10 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
-import static org.springframework.data.jpa.domain.Specification.where;
-@CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080","http://127.0.0.1:5500"})
+@CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping(value = "/products")
 @Validated
@@ -29,66 +30,81 @@ public class Product_Controller {
     private FileDataService fileDataService;
     @Autowired
     private Product_Repository productRepository;
-    @PostMapping(value = "/addnewproducts")
-    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products) throws IOException {
-        return new ResponseEntity<>(productsService.SaveProduct(products),
-        HttpStatus.CREATED);
+    @PostMapping(value = "/addNewProducts")
+    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products){
+        return new ResponseEntity<>(productsService.saveProduct(products),HttpStatus.CREATED);
     }
-    @GetMapping(value = "/getall")
+    @GetMapping(value = "/getAll")
     public ResponseEntity<List<Products>> GetAllProducts(){
         return new ResponseEntity<>(productsService.GetAllProducts(),HttpStatus.OK);
     }
-    @GetMapping(value = "/images/{image}")
-    public ResponseEntity<byte[]> downloadFileFromDB(@PathVariable(name = "image") String filename) throws IOException {
+    @GetMapping(value = "/getById/{id}")
+    public ResponseEntity<Products> getProductByID (@PathVariable("id") int id){
+        return new ResponseEntity<>(productsService.getById(id),HttpStatus.OK);
+    }
+    @PutMapping(value = "/updateById/{id}")
+    public ResponseEntity<Products> updateProduct(@RequestBody Products products,@PathVariable("id") int id){
+        return new ResponseEntity<>(productsService.updateProduct(products,id),HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/deleteById/{id}")
+    public ResponseEntity<String> DeleteProduct(@PathVariable(name = "id") int id){
+        productsService.DeleteProducts(id);
+        return new ResponseEntity<>("Delete successfull",HttpStatus.OK);
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam(name = "image") MultipartFile file) throws IOException {
+        File_Image fileImage= fileDataService.uploadFile(file);
+        return ResponseEntity.status(HttpStatus.OK).body(fileImage.getName());
+    }
+    @GetMapping("/image/get/{filename}")
+    public ResponseEntity<?> downloadFile(@PathVariable(name = "filename") String filename) throws IOException {
         byte[] img = fileDataService.downloadImage(filename);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(img);
     }
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> DeleteProduct(@PathVariable(name = "id") int id){
-        productsService.DeleteProducts(id);
-        return new ResponseEntity<>("Delete successfull",HttpStatus.OK);
+    @DeleteMapping("/image/delete/{filename}")
+    public void deleteFile(@PathVariable("filename") String filename) throws IOException {
+        fileDataService.Deletefile(filename);
     }
     @GetMapping(value = "/pagination")
     public ResponseEntity<Page<Products>> GetProductWithPagination(@RequestParam(name = "offset") int offset ,
                                                                    @RequestParam(name= "pagesize") int pagesize){
         return new ResponseEntity<>(productsService.GetProductsByPaginations(offset,pagesize),HttpStatus.OK);
     }
-    @GetMapping(value = "/pagiationandsort")
+    @GetMapping(value = "/paginationAndSort")
     public ResponseEntity<Page<Products>> GetProductWithPaginationAndSort   (
             @RequestParam(value = "field") String field,
             @RequestParam(value = "offset") int offset,
-            @RequestParam(value = "pagesize") int pagesize
+            @RequestParam(value = "pageSize") int pagesize
     ){
         return new ResponseEntity<>(productsService.GetProductsByPaginationsAndSort(offset,pagesize,field),HttpStatus.OK);
     }
-    @GetMapping(value = "/search")
-    public Page<Products> GetProductBySearchIDOrName(
-            @RequestParam(value = "field") String field,
-            @RequestParam(value = "offset") int offset,
-            @RequestParam(value = "pagesize") int pagesize
-            )
-    {
-        Pageable pageable = PageRequest.of(offset,pagesize);
-        return productRepository.findAll(where(ProductSpecifications.search(field)),pageable);
-    }
-    @GetMapping(value = "/filter",consumes = {MediaType.ALL_VALUE})
+//    @GetMapping(value = "/search")
+//    public Page<Products> GetProductBySearchIDOrName(
+//            @RequestParam(value = "field") String field,
+//            @RequestParam(value = "offset") int offset,
+//            @RequestParam(value = "pagesize") int pagesize
+//            )
+//    {
+//        Pageable pageable = PageRequest.of(offset,pagesize);
+//        return productRepository.findAll(where(ProductSpecifications.search(field)),pageable);
+//    }
+    @GetMapping(value = "/filterAndSearch",consumes = {MediaType.ALL_VALUE})
     public Page<Products> filter(
-
             @RequestParam(name = "minPrice",required = false,defaultValue = "0") String minPrice,
             @RequestParam(name = "maxPrice",required = false,defaultValue = "0") String maxPrice,
             @RequestParam(name = "search",required = false) String search,
-            @RequestParam(name = "sortby",required = false,defaultValue = "name") String sortby,
+            @RequestParam(name = "sortBy",required = false,defaultValue = "name") String sortby,
             @RequestParam(name = "offset",required = false,defaultValue = "0") int offset,
-            @RequestParam(name = "pagesize",required = false,defaultValue = "10") int pagesize
+            @RequestParam(name = "pageSize",required = false,defaultValue = "10") int pagesize
     )
     {
         Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,sortby));
         if(minPrice.equals("0")&&maxPrice.equals("0")){
             return productRepository.findAll(pageable);
         }
-        if(maxPrice.equals("0")){
+        else if(maxPrice.equals("0")){
             return productRepository.findAll(ProductSpecifications.filterMin(minPrice,search),pageable);
         }
         else {

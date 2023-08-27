@@ -1,6 +1,8 @@
 package com.example.mysmallproject.advice;
 
+import com.example.mysmallproject.Exception.ApiRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,11 +23,9 @@ public class applicationExceptionHandler {
         });
         return errorMap;
     }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Map<String,String> handlerForHttpException(HttpMessageNotReadableException ex){
-        Map<String,String> error = new HashMap<>();
-        error.put(ex.getCause().toString(),ex.getMessage().toString());
-        return error;
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ApiRequestException.class)
+    public ResponseEntity<?> handlerForHttpException(ApiRequestException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

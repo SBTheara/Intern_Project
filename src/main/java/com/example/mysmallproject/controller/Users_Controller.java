@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import static org.springframework.data.jpa.domain.Specification.where;
-@CrossOrigin(origins = {"http://localhost:4200", "http://10.0.2.2:8080"})
+@CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping(value = "/users")
 public class Users_Controller {
@@ -21,13 +21,17 @@ public class Users_Controller {
     private UsersService usersService;
     @Autowired
     private UsersRepository usersRepository;
-    @PostMapping(value = "/addnewUsers")
+    @PostMapping(value = "/addNewUsers")
     public ResponseEntity<Users> saveUser(@RequestBody Users user){
         return new ResponseEntity<>(usersService.saveUser(user), HttpStatus.CREATED);
     }
     @GetMapping(value = "/getAllUsers")
     public ResponseEntity<List<Users>> getUsers(){
         return new ResponseEntity<>(usersService.getUsers(),HttpStatus.OK);
+    }
+    @GetMapping(value = "/getUserById/{id}")
+    public ResponseEntity<Users> getUserById(@PathVariable(name = "id") int id){
+        return new ResponseEntity<>(usersService.getUserById(id),HttpStatus.OK);
     }
     @PutMapping(value = "/updateUsers/{id}")
     public ResponseEntity<String> updateUser (@RequestBody Users user, @PathVariable(name = "id") int id){
@@ -59,6 +63,12 @@ public class Users_Controller {
     )
     {
         Pageable pageable = PageRequest.of(offset,pagesize,Sort.by(Sort.Direction.ASC,sortby));
+        if(address.isEmpty()&&type.isEmpty()){
+            return usersRepository.findAll(pageable);
+        }else{
             return usersRepository.findAll(where(UserSpacifications.filterAndSearch(address,type,search)),pageable);
+        }
+
+
     }
 }
