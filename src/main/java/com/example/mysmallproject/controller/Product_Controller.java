@@ -31,12 +31,12 @@ public class Product_Controller {
     @Autowired
     private Product_Repository productRepository;
     @PostMapping(value = "/addNewProducts")
-    public ResponseEntity<Products> SaveProducts(@Valid @RequestBody Products products){
+    public ResponseEntity<Products> saveProducts(@Valid @RequestBody Products products){
         return new ResponseEntity<>(productsService.saveProduct(products),HttpStatus.CREATED);
     }
     @GetMapping(value = "/getAll")
-    public ResponseEntity<List<Products>> GetAllProducts(){
-        return new ResponseEntity<>(productsService.GetAllProducts(),HttpStatus.OK);
+    public ResponseEntity<List<Products>> getAllProducts(){
+        return new ResponseEntity<>(productsService.getAllProducts(),HttpStatus.OK);
     }
     @GetMapping(value = "/getById/{id}")
     public ResponseEntity<Products> getProductByID (@PathVariable("id") int id){
@@ -47,8 +47,8 @@ public class Product_Controller {
         return new ResponseEntity<>(productsService.updateProduct(products,id),HttpStatus.OK);
     }
     @DeleteMapping(value = "/deleteById/{id}")
-    public ResponseEntity<String> DeleteProduct(@PathVariable(name = "id") int id){
-        productsService.DeleteProducts(id);
+    public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id){
+        productsService.deleteProducts(id);
         return new ResponseEntity<>("Delete successfull",HttpStatus.OK);
     }
     @PostMapping("/upload")
@@ -65,20 +65,20 @@ public class Product_Controller {
     }
     @DeleteMapping("/image/delete/{filename}")
     public void deleteFile(@PathVariable("filename") String filename) throws IOException {
-        fileDataService.Deletefile(filename);
+        fileDataService.deletefile(filename);
     }
     @GetMapping(value = "/pagination")
-    public ResponseEntity<Page<Products>> GetProductWithPagination(@RequestParam(name = "offset") int offset ,
+    public ResponseEntity<Page<Products>> getProductWithPagination(@RequestParam(name = "offset") int offset ,
                                                                    @RequestParam(name= "pagesize") int pagesize){
-        return new ResponseEntity<>(productsService.GetProductsByPaginations(offset,pagesize),HttpStatus.OK);
+        return new ResponseEntity<>(productsService.getProductsByPaginations(offset,pagesize),HttpStatus.OK);
     }
     @GetMapping(value = "/paginationAndSort")
-    public ResponseEntity<Page<Products>> GetProductWithPaginationAndSort   (
+    public ResponseEntity<Page<Products>> getProductWithPaginationAndSort   (
             @RequestParam(value = "field") String field,
             @RequestParam(value = "offset") int offset,
             @RequestParam(value = "pageSize") int pagesize
     ){
-        return new ResponseEntity<>(productsService.GetProductsByPaginationsAndSort(offset,pagesize,field),HttpStatus.OK);
+        return new ResponseEntity<>(productsService.getProductsByPaginationsAndSort(offset,pagesize,field),HttpStatus.OK);
     }
 //    @GetMapping(value = "/search")
 //    public Page<Products> GetProductBySearchIDOrName(

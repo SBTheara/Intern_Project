@@ -24,7 +24,7 @@ public class Product_Implement implements Products_Service {
         return productRepository.save(products);
     }
     @Override
-    public List<Products> GetAllProducts() {
+    public List<Products> getAllProducts() {
         return productRepository.findAll();
     }
 
@@ -49,16 +49,16 @@ public class Product_Implement implements Products_Service {
     }
 
     @Override
-    public Page<Products> GetProductsByPaginations(int offset, int pagesize) {
+    public Page<Products> getProductsByPaginations(int offset, int pagesize) {
         Pageable pageable = PageRequest.of(offset, pagesize);
         return productRepository.findAll(pageable);
     }
     @Override
-    public Page<Products> GetProductsByPaginationsAndSort(int offset, int pagesize, String field) {
+    public Page<Products> getProductsByPaginationsAndSort(int offset, int pagesize, String field) {
         return productRepository.findAll(PageRequest.of(offset,pagesize).withSort(Sort.by(field)));
     }
     @Override
-    public void DeleteProducts(int id) {
+    public void deleteProducts(int id) {
         productRepository.deleteById(id);
     }
 

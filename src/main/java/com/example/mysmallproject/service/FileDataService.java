@@ -34,7 +34,7 @@ public class FileDataService {
         file.transferTo(new File(currentFilename));//transfer file to directory
         return fileImage;
     }
-    public void Deletefile(String filename) throws IOException {
+    public void deletefile(String filename) throws IOException {
         Path currentDirectoryPath = FileSystems.getDefault().getPath("");
         String currentDirectoryName = currentDirectoryPath.toAbsolutePath()+"\\images\\"+filename;
         Path getpath = Paths.get(currentDirectoryName);

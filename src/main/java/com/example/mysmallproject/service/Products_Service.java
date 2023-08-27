@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface Products_Service {
     Products saveProduct(Products products);
-    List<Products> GetAllProducts();
+    List<Products> getAllProducts();
     Products getById(int id);
     Products updateProduct(Products products,int id);
-    Page<Products> GetProductsByPaginations(int offset, int pagesize);
-    Page<Products> GetProductsByPaginationsAndSort(int offset, int pagesize,String field);
-    void DeleteProducts(int id);
+    Page<Products> getProductsByPaginations(int offset, int pagesize);
+    Page<Products> getProductsByPaginationsAndSort(int offset, int pagesize,String field);
+    void deleteProducts(int id);
 
 }
