@@ -51,12 +51,12 @@ public class Product_Controller {
         productsService.deleteProducts(id);
         return new ResponseEntity<>("Delete successfull",HttpStatus.OK);
     }
-    @PostMapping("/upload")
+    @PostMapping("/images/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(name = "image") MultipartFile file) throws IOException {
         File_Image fileImage= fileDataService.uploadFile(file);
         return ResponseEntity.status(HttpStatus.OK).body(fileImage.getName());
     }
-    @GetMapping("/image/get/{filename}")
+    @GetMapping("/images/get/{filename}")
     public ResponseEntity<?> downloadFile(@PathVariable(name = "filename") String filename) throws IOException {
         byte[] img = fileDataService.downloadImage(filename);
         return ResponseEntity.status(HttpStatus.OK)
