@@ -1,15 +1,13 @@
 package com.example.mysmallproject.service;
 
-import com.example.mysmallproject.entity.Products;
-import com.example.mysmallproject.entity.Users;
-import org.springframework.data.domain.Page;
+import com.example.mysmallproject.entity.User;
 
 import java.util.List;
 
 public interface UsersService {
-    Users saveUser(Users user);
-    List<Users> getUsers();
-    Users getUserById(int id);
-    Users updateUsers(Users user,int id);
+    User saveUser(User user);
+    List<User> getUser();
+    User getUserById(int id);
+    User updateUser(User user, int id);
     void deleteUser(int id);
 }

@@ -1,12 +1,10 @@
-package com.example.mysmallproject.specifications;
-
-import com.example.mysmallproject.entity.Products;
+package com.example.mysmallproject.specification;
+import com.example.mysmallproject.entity.Product;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
 @Component
-public class ProductSpecifications {
-    public static Specification<Products> search(String field){
+public class ProductSpecification {
+    public static Specification<Product> search (String field){
         String param = "%"+field.replaceAll("\\s","").toUpperCase()+"%";
         return (root, query, criteriaBuilder) -> criteriaBuilder.or(
                 criteriaBuilder.like(
@@ -14,7 +12,7 @@ public class ProductSpecifications {
                     criteriaBuilder.like(criteriaBuilder.toString(root.get("price")),field)
         );
     }
-    public static Specification<Products> filterMaxAndMin(String minPrice,String maxPrice ,String search){
+    public static Specification<Product> filterMaxAndMin(String minPrice, String maxPrice , String search){
         if(minPrice!=null && maxPrice!=null &&search!=null){
             return (root, query, criteriaBuilder) -> criteriaBuilder.or(
                     criteriaBuilder.and(
@@ -25,7 +23,7 @@ public class ProductSpecifications {
             return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
         }
     }
-    public static Specification<Products> filterMin(String minPrice,String search){
+    public static Specification<Product> filterMin(String minPrice, String search){
         if (minPrice!=null){
             return (root, query, criteriaBuilder) -> criteriaBuilder.or(
                     criteriaBuilder.and(

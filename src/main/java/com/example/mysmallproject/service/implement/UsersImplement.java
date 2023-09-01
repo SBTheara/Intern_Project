@@ -1,15 +1,10 @@
 package com.example.mysmallproject.service.implement;
 
-import com.example.mysmallproject.Exception.ApiRequestException;
-import com.example.mysmallproject.entity.Products;
-import com.example.mysmallproject.entity.Users;
+import com.example.mysmallproject.entity.User;
+import com.example.mysmallproject.exception.RequestException;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,29 +14,28 @@ public class UsersImplement implements UsersService {
     @Autowired
     private UsersRepository usersRepository;
     @Override
-    public Users saveUser(Users user) {
+    public User saveUser(User user) {
         return usersRepository.save(user);
     }
     @Override
-    public List<Users> getUsers(){
+    public List<User> getUser(){
         return usersRepository.findAll();
     }
-
     @Override
-    public Users getUserById(int id) {
-        return usersRepository.findById(id).orElseThrow(()->new ApiRequestException("Not found for this user"));
+    public User getUserById(int id) {
+        return usersRepository.findById(id).orElseThrow(()->new RequestException("Not found for this user"));
     }
     @Override
-    public Users updateUsers(Users user, int id) {
-        Users users = usersRepository.findById(id).orElseThrow(()->new ApiRequestException("Not found for this user"));
-        users.setFirstname(user.getFirstname());
-        users.setLastname(user.getLastname());
+    public User updateUser(User user, int id) {
+        User users = usersRepository.findById(id).orElseThrow(()->new RequestException("Not found for this user"));
+        users.setFirstName(user.getFirstName());
+        users.setLastName(user.getLastName());
         users.setEmail(user.getEmail());
         users.setPassword(user.getPassword());
         users.setAddress(user.getAddress());
         users.setPhone(user.getPhone());
         users.setType(user.getType());
-        users.setCreate_at(user.getCreate_at());
+        users.setCreateAt(user.getCreateAt());
         usersRepository.save(users);
         return users;
     }

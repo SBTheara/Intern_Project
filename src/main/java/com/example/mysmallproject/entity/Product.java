@@ -5,8 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -16,10 +14,10 @@ import java.util.Set;
 @Setter
 @Builder
 @Validated
-public class Products {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "product_id")
+    @Column(name = "productId")
     private int id;
     @NotNull
     @NotBlank(message = "Please enter the name of the products")
@@ -34,11 +32,5 @@ public class Products {
     @NotNull
     @NotBlank
     private String image;
-//    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-//    @JoinTable(name = "product_category",
-//            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
-//            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"))
-//    @Size(min = 1)
-//    @NotNull
-//    private Set<Category> categories = new HashSet<>();
+
 }

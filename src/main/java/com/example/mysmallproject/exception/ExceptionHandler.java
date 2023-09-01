@@ -1,21 +1,18 @@
-package com.example.mysmallproject.advice;
+package com.example.mysmallproject.exception;
 
-import com.example.mysmallproject.Exception.ApiRequestException;
+import com.example.mysmallproject.exception.RequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 @RestControllerAdvice
-public class applicationExceptionHandler {
+public class ExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String,String> handlerInvalidException(MethodArgumentNotValidException ex){
         Map<String,String> errorMap= new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
@@ -24,8 +21,8 @@ public class applicationExceptionHandler {
         return errorMap;
     }
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(ApiRequestException.class)
-    public ResponseEntity<?> handlerForHttpException(ApiRequestException ex){
+    @org.springframework.web.bind.annotation.ExceptionHandler(RequestException.class)
+    public ResponseEntity<?> handlerForHttpException(RequestException ex){
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

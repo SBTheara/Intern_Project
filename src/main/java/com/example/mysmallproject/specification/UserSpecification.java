@@ -1,21 +1,10 @@
-package com.example.mysmallproject.specifications;
-import com.example.mysmallproject.entity.Users;
+package com.example.mysmallproject.specification;
+import com.example.mysmallproject.entity.User;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 @Component
-public class UserSpacifications {
-//    public static Specification<Users> search(String field){
-//        String param = "%"+field.replaceAll("\\s","").toUpperCase()+"%";
-//        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
-//                criteriaBuilder.like(
-//                        criteriaBuilder.upper(
-//                        criteriaBuilder.concat(root.get("firstname"),root.get("lastname"))),param),
-//
-//                criteriaBuilder.like(
-//                        criteriaBuilder.upper(root.get("address")),param)
-//        );
-//    };
-    public static Specification<Users> filterAndSearch(String address,String type, String search){
+public class UserSpecification {
+    public static Specification<User> filterAndSearch(String address, String type, String search){
         if(address!=null && type!=null && search!=null){
             return (root, query, criteriaBuilder) -> criteriaBuilder.and(
                     criteriaBuilder.like(
