@@ -59,7 +59,7 @@ public class UsersController {
         return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
     @GetMapping(value = "/filterAndSearch")
-    public Page<User> filter(
+    public Page<UserDTO> filter(
             @RequestParam(name = "address",required = false) String address,
             @RequestParam(name = "type",required = false) String type,
             @RequestParam(name = "search",required = false) String search,
@@ -68,13 +68,6 @@ public class UsersController {
             @RequestParam(name = "pageSize",required = false,defaultValue = "10") int pageSize
     )
     {
-        Pageable pageable = PageRequest.of(offset,pageSize,Sort.by(Sort.Direction.ASC,sortBy));
-        if(address.isEmpty()&&type.isEmpty()){
-            log.debug("Get all users !!!");
-            return usersRepository.findAll(pageable);
-        }else{
-            log.debug("Get the user has match = {} and from page has offset : {} and pagesize : {}",search,offset,pageSize);
-            return usersRepository.findAll(where(UserSpecification.filterAndSearch(address,type,search)),pageable);
-        }
+        return usersService.filter(address, type, search, sortBy, offset, pageSize);
     }
 }

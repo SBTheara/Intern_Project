@@ -1009,3 +1009,107 @@ List of constraint violations:[
 2023-09-03T17:06:16.634+07:00  INFO 11092 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2023-09-03T17:06:16.636+07:00  INFO 11092 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2023-09-03T17:06:16.652+07:00  INFO 11092 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-03T20:56:24.541+07:00  INFO 10964 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 20.0.1 with PID 10964 (D:\java-spring-boot\Intern_Project\target\classes started by Theara in D:\java-spring-boot\Intern_Project)
+2023-09-03T20:56:24.542+07:00 DEBUG 10964 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-03T20:56:24.543+07:00  INFO 10964 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-03T20:56:25.924+07:00  INFO 10964 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-03T20:56:26.060+07:00  INFO 10964 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 121 ms. Found 3 JPA repository interfaces.
+2023-09-03T20:56:27.317+07:00  INFO 10964 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-03T20:56:27.329+07:00  INFO 10964 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-03T20:56:27.329+07:00  INFO 10964 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-03T20:56:27.461+07:00  INFO 10964 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-03T20:56:27.462+07:00  INFO 10964 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2839 ms
+2023-09-03T20:56:28.291+07:00  INFO 10964 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-03T20:56:28.321+07:00  INFO 10964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-03T20:56:28.801+07:00  INFO 10964 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@16e07bae
+2023-09-03T20:56:28.804+07:00  INFO 10964 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-03T20:56:30.967+07:00  INFO 10964 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T20:56:31.651+07:00  WARN 10964 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-03T20:56:32.119+07:00  INFO 10964 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-03T20:56:32.141+07:00  INFO 10964 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 8.746 seconds (process running for 11.222)
+2023-09-03T20:57:47.429+07:00  INFO 10964 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-03T20:57:47.430+07:00  INFO 10964 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-03T20:57:47.431+07:00  INFO 10964 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-09-03T20:57:47.739+07:00 DEBUG 10964 --- [http-nio-8888-exec-2] c.e.m.controller.ProductController       : Get products start from 20000
+2023-09-03T20:58:06.965+07:00 DEBUG 10964 --- [http-nio-8888-exec-3] c.e.m.controller.ProductController       : Get products start from 20000
+2023-09-03T20:58:57.879+07:00  INFO 10964 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T20:58:57.881+07:00  INFO 10964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-03T20:58:57.891+07:00  INFO 10964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-03T20:59:04.347+07:00  INFO 13016 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 20.0.1 with PID 13016 (D:\java-spring-boot\Intern_Project\target\classes started by Theara in D:\java-spring-boot\Intern_Project)
+2023-09-03T20:59:04.349+07:00 DEBUG 13016 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-03T20:59:04.350+07:00  INFO 13016 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-03T20:59:05.251+07:00  INFO 13016 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-03T20:59:05.337+07:00  INFO 13016 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 75 ms. Found 3 JPA repository interfaces.
+2023-09-03T20:59:05.999+07:00  INFO 13016 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-03T20:59:06.019+07:00  INFO 13016 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-03T20:59:06.019+07:00  INFO 13016 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-03T20:59:06.124+07:00  INFO 13016 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-03T20:59:06.124+07:00  INFO 13016 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1710 ms
+2023-09-03T20:59:06.751+07:00  INFO 13016 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-03T20:59:06.772+07:00  INFO 13016 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-03T20:59:07.210+07:00  INFO 13016 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7283877
+2023-09-03T20:59:07.214+07:00  INFO 13016 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-03T20:59:09.053+07:00  INFO 13016 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T20:59:09.815+07:00  WARN 13016 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-03T20:59:10.363+07:00  INFO 13016 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-03T20:59:10.376+07:00  INFO 13016 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 6.685 seconds (process running for 7.802)
+2023-09-03T21:00:29.974+07:00  INFO 13016 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-03T21:00:29.975+07:00  INFO 13016 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-03T21:00:29.978+07:00  INFO 13016 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-09-03T21:00:30.289+07:00 DEBUG 13016 --- [http-nio-8888-exec-2] c.e.m.controller.ProductController       : Get products start from 20000
+2023-09-03T21:00:37.640+07:00 DEBUG 13016 --- [http-nio-8888-exec-3] c.e.m.controller.ProductController       : Get products start from 20000
+2023-09-03T21:03:50.212+07:00  INFO 13016 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T21:03:50.215+07:00  INFO 13016 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-03T21:03:50.229+07:00  INFO 13016 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-03T21:03:58.198+07:00  INFO 10644 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 20.0.1 with PID 10644 (D:\java-spring-boot\Intern_Project\target\classes started by Theara in D:\java-spring-boot\Intern_Project)
+2023-09-03T21:03:58.200+07:00 DEBUG 10644 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-03T21:03:58.201+07:00  INFO 10644 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-03T21:03:59.036+07:00  INFO 10644 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-03T21:03:59.139+07:00  INFO 10644 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 3 JPA repository interfaces.
+2023-09-03T21:03:59.823+07:00  INFO 10644 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-03T21:03:59.836+07:00  INFO 10644 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-03T21:03:59.836+07:00  INFO 10644 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-03T21:03:59.951+07:00  INFO 10644 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-03T21:03:59.952+07:00  INFO 10644 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1691 ms
+2023-09-03T21:04:00.553+07:00  INFO 10644 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-03T21:04:00.573+07:00  INFO 10644 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-03T21:04:00.996+07:00  INFO 10644 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@69d2fb0a
+2023-09-03T21:04:00.999+07:00  INFO 10644 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-03T21:04:02.409+07:00  INFO 10644 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T21:04:03.015+07:00  WARN 10644 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-03T21:04:03.474+07:00  INFO 10644 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-03T21:04:03.484+07:00  INFO 10644 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 5.94 seconds (process running for 7.375)
+2023-09-03T21:04:44.873+07:00  INFO 10644 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-03T21:04:44.873+07:00  INFO 10644 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-03T21:04:44.875+07:00  INFO 10644 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-09-03T21:04:45.220+07:00 DEBUG 10644 --- [http-nio-8888-exec-1] c.e.m.controller.ProductController       : Get products start from 20000
+2023-09-03T21:04:56.443+07:00 DEBUG 10644 --- [http-nio-8888-exec-3] c.e.m.controller.ProductController       : Get all products
+2023-09-03T21:21:38.598+07:00  INFO 10644 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T21:21:38.602+07:00  INFO 10644 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-03T21:21:38.612+07:00  INFO 10644 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-03T21:21:53.400+07:00  INFO 10416 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 20.0.1 with PID 10416 (D:\java-spring-boot\Intern_Project\target\classes started by Theara in D:\java-spring-boot\Intern_Project)
+2023-09-03T21:21:53.402+07:00 DEBUG 10416 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-03T21:21:53.403+07:00  INFO 10416 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-03T21:21:54.547+07:00  INFO 10416 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-03T21:21:54.635+07:00  INFO 10416 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 3 JPA repository interfaces.
+2023-09-03T21:21:55.313+07:00  INFO 10416 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-03T21:21:55.327+07:00  INFO 10416 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-03T21:21:55.327+07:00  INFO 10416 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-03T21:21:55.444+07:00  INFO 10416 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-03T21:21:55.444+07:00  INFO 10416 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1978 ms
+2023-09-03T21:21:56.111+07:00  INFO 10416 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-03T21:21:56.137+07:00  INFO 10416 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-03T21:21:56.673+07:00  INFO 10416 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2da5fdc
+2023-09-03T21:21:56.676+07:00  INFO 10416 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-03T21:21:58.278+07:00  INFO 10416 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T21:21:58.882+07:00  WARN 10416 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-03T21:21:59.327+07:00  INFO 10416 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-03T21:21:59.338+07:00  INFO 10416 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 6.571 seconds (process running for 8.865)
+2023-09-03T21:23:30.249+07:00  INFO 10416 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-03T21:23:30.250+07:00  INFO 10416 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-03T21:23:30.251+07:00  INFO 10416 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-09-03T21:23:30.290+07:00 DEBUG 10416 --- [http-nio-8888-exec-2] c.e.m.controller.UsersController         : Get all users !!!!!
+2023-09-03T21:23:50.810+07:00 DEBUG 10416 --- [http-nio-8888-exec-5] c.e.m.controller.ProductController       : Get all products
+2023-09-03T21:38:15.180+07:00  INFO 10416 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-03T21:38:15.182+07:00  INFO 10416 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-03T21:38:15.198+07:00  INFO 10416 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

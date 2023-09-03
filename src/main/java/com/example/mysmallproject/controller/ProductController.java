@@ -7,6 +7,7 @@ import com.example.mysmallproject.repository.ProductRepository;
 import com.example.mysmallproject.service.ImageService;
 import com.example.mysmallproject.service.ProductService;
 import com.example.mysmallproject.specification.ProductSpecification;
+import com.example.mysmallproject.utils.ProductDTOConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +37,12 @@ public class ProductController {
     private final ImageService imageService;
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final ProductDTOConverter productDTOConverter;
     @PostMapping(value = "/addNewProducts")
     public ResponseEntity<ProductDTO> saveProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO){
-        Product productRequest = modelMapper.map(productCreationDTO,Product.class);
+        Product productRequest = productDTOConverter.convertProductDTOtoProduct(productCreationDTO);
         Product product = productsService.saveProduct(productRequest);
-        ProductDTO productResponse = modelMapper.map(product,ProductDTO.class);
+        ProductDTO productResponse = productDTOConverter.convertProductToProductDTO(product);
         log.debug("Products has been added");
         return new ResponseEntity<>(productResponse,HttpStatus.CREATED);
     }
@@ -52,18 +51,18 @@ public class ProductController {
         log.debug("Get all information of products......");
         return new ResponseEntity<>(productsService.getAllProduct()
                 .stream()
-                .map(pro->modelMapper.map(pro,ProductDTO.class))
+                .map(productDTOConverter::convertProductToProductDTO)
                 .collect(Collectors.toList()),HttpStatus.OK);
     }
     @GetMapping(value = "/getById/{id}")
     public ResponseEntity<ProductDTO> getProductByID (@PathVariable("id") int id){
         Product productRequest = productsService.getById(id);
         log.debug("Get successful the product has id {}",id);
-        return new ResponseEntity<>(modelMapper.map(productRequest,ProductDTO.class),HttpStatus.OK);
+        return new ResponseEntity<>(productDTOConverter.convertProductToProductDTO(productRequest),HttpStatus.OK);
     }
     @PutMapping(value = "/updateById/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id){
-        Product productRequest = modelMapper.map(productCreationDTO,Product.class);
+        Product productRequest = productDTOConverter.convertProductDTOtoProduct(productCreationDTO);
         Product product = productsService.updateProduct(productRequest,id);
         log.debug("This user who id is {} was updated.......",id);
         return new ResponseEntity<>(modelMapper.map(product,ProductDTO.class),HttpStatus.OK);
@@ -110,7 +109,7 @@ public class ProductController {
         return new ResponseEntity<>(productsService.getProductsByPaginationsAndSort(offset,pageSize,field),HttpStatus.OK);
     }
     @GetMapping(value = "/filterAndSearch",consumes = {MediaType.ALL_VALUE})
-    public Page<Product> filter(
+    public Page<ProductDTO> filter(
             @RequestParam(name = "minPrice",required = false,defaultValue = "0") String minPrice,
             @RequestParam(name = "maxPrice",required = false,defaultValue = "0") String maxPrice,
             @RequestParam(name = "search",required = false) String search,
@@ -121,17 +120,23 @@ public class ProductController {
     {
         Pageable pageable = PageRequest.of(offset,pageSize,Sort.by(Sort.Direction.ASC,sortBy));
         if(minPrice.equals("0")&&maxPrice.equals("0")){
+            List<ProductDTO> pro =productRepository.findAll(pageable).stream().map(productDTOConverter::convertProductToProductDTO).toList();
+            Page<ProductDTO> productPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
             log.debug("Get all products");
-            return productRepository.findAll(pageable);
+            return productPage;
         }
         else if(maxPrice.equals("0")){
+            List<ProductDTO> pro = productRepository.findAll(ProductSpecification.filterMin(minPrice,search),pageable).stream().map(productDTOConverter::convertProductToProductDTO).collect(Collectors.toList());
+            Page<ProductDTO> productPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
             log.debug("Get products start from {}",minPrice);
-            return productRepository.findAll(ProductSpecification.filterMin(minPrice,search),pageable);
+            return productPage;
         }
         else {
+            List<ProductDTO> pro = productRepository.findAll(ProductSpecification.filterMaxAndMin(minPrice, maxPrice, search), pageable).stream().map(productDTOConverter::convertProductToProductDTO).toList();
+            Page<ProductDTO> productDTOPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
             log.debug("Get products has minPrice : {} maxPrice : {} and search : {} on page at offset : {}" +
                     " pagesize : {} and sortBy : {}",minPrice,maxPrice,search,offset,pageSize,search);
-            return productRepository.findAll(ProductSpecification.filterMaxAndMin(minPrice, maxPrice, search), pageable);
+            return productDTOPage;
         }
     }
 }

@@ -1,17 +1,22 @@
 package com.example.mysmallproject.service.implement;
 
+import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.dto.UserDTO;
 import com.example.mysmallproject.dto.UserRegistrationDTO;
 import com.example.mysmallproject.entity.User;
 import com.example.mysmallproject.exception.RequestException;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
+import com.example.mysmallproject.specification.UserSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class UsersImplement implements UsersService {
@@ -51,6 +56,20 @@ public class UsersImplement implements UsersService {
     @Override
     public void deleteUser(int id) {
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<UserDTO> filter(String address, String type, String search, String sortBy, int offset, int pageSize) {
+        Pageable pageable = PageRequest.of(offset,pageSize, Sort.by(Sort.Direction.ASC,sortBy));
+        if(address.isEmpty()&&type.isEmpty()){
+            List<UserDTO> userDTOS = usersRepository.findAll(pageable).stream().map(p->modelMapper.map(p,UserDTO.class)).toList();
+            Page<UserDTO> productDTOPage = new PageImpl<>(userDTOS,Pageable.unpaged(),userDTOS.size());
+            return productDTOPage;
+        }else{
+            List<UserDTO> userDTOS = usersRepository.findAll(where(UserSpecification.filterAndSearch(address,type,search)),pageable).stream().map(p->modelMapper.map(p,UserDTO.class)).toList();
+            Page<UserDTO> productDTOPage = new PageImpl<>(userDTOS,Pageable.unpaged(),userDTOS.size());
+            return productDTOPage;
+        }
     }
 
 }
