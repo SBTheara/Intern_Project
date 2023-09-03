@@ -28,7 +28,7 @@ public class Product {
     private double price;
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date CreateAt;
+    private Date createAt;
     @NotNull
     @NotBlank
     private String image;

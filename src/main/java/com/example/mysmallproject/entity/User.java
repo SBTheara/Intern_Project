@@ -41,9 +41,6 @@ public class User {
     @NotBlank(message = "Please input your phone number")
     private String phone;
     @NotNull
-    @NotBlank(message = "Please input the your type")
-    private String type;
-    @NotNull
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date createAt;
 }

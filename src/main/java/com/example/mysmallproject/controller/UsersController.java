@@ -1,4 +1,6 @@
 package com.example.mysmallproject.controller;
+import com.example.mysmallproject.dto.UserDTO;
+import com.example.mysmallproject.dto.UserRegistrationDTO;
 import com.example.mysmallproject.entity.User;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
@@ -6,6 +8,7 @@ import com.example.mysmallproject.specification.UserSpecification;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,24 +27,28 @@ import static org.springframework.data.jpa.domain.Specification.where;
 public class UsersController {
     private final UsersService usersService;
     private final UsersRepository usersRepository;
+    private final ModelMapper modelMapper;
     @PostMapping(value = "/addNewUsers")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserRegistrationDTO userRegistrationDTO){
+//        User userRequest = modelMapper.map(userRegistrationDTO,User.class);
+//        User user = usersService.saveUser(userRequest);
+//        UserDTO userResponse = modelMapper.map(user,UserDTO.class);
         log.debug("New user has been added !!!!!");
-        return new ResponseEntity<>(usersService.saveUser(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(usersService.saveUser(userRegistrationDTO), HttpStatus.CREATED);
     }
     @GetMapping(value = "/getAllUsers")
-    public ResponseEntity<List<User>> getUsers(){
+    public ResponseEntity<List<UserDTO>> getUsers(){
         log.debug("Get all users !!!!!");
         return new ResponseEntity<>(usersService.getUser(),HttpStatus.OK);
     }
     @GetMapping(value = "/getUserById/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable(name = "id") int id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") int id){
         log.debug("User found for id: {}!!!!!",id);
         return new ResponseEntity<>(usersService.getUserById(id),HttpStatus.OK);
     }
     @PutMapping(value = "/updateUsers/{id}")
-    public ResponseEntity<String> updateUser (@RequestBody User user, @PathVariable(name = "id") int id){
-        usersService.updateUser(user,id);
+    public ResponseEntity<String> updateUser (@RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id){
+        usersService.updateUser(userRegistrationDTO,id);
         log.debug("User has been updated !!!!");
         return new ResponseEntity<>("Update successful",HttpStatus.OK);
     }

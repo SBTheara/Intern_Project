@@ -1,46 +1,56 @@
 package com.example.mysmallproject.service.implement;
 
+import com.example.mysmallproject.dto.UserDTO;
+import com.example.mysmallproject.dto.UserRegistrationDTO;
 import com.example.mysmallproject.entity.User;
 import com.example.mysmallproject.exception.RequestException;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.service.UsersService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersImplement implements UsersService {
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @Override
-    public User saveUser(User user) {
-        return usersRepository.save(user);
+    public UserDTO saveUser(UserRegistrationDTO userRegistrationDTO) {
+        User userRequest = modelMapper.map(userRegistrationDTO,User.class);
+        User user = usersRepository.save(userRequest);
+        return modelMapper.map(user,UserDTO.class);
     }
     @Override
-    public List<User> getUser(){
-        return usersRepository.findAll();
+    public List<UserDTO> getUser(){
+        return usersRepository.findAll().stream().map(user->modelMapper.map(user,UserDTO.class)).collect(Collectors.toList());
     }
     @Override
-    public User getUserById(int id) {
-        return usersRepository.findById(id).orElseThrow(()->new RequestException("Not found for this user"));
+    public UserDTO getUserById(int id) {
+        User userRequest = usersRepository.findById(id).get();
+        return modelMapper.map(userRequest,UserDTO.class);
     }
     @Override
-    public User updateUser(User user, int id) {
+    public UserDTO updateUser(UserRegistrationDTO userRegistrationDTO, int id) {
         User users = usersRepository.findById(id).orElseThrow(()->new RequestException("Not found for this user"));
-        users.setFirstName(user.getFirstName());
-        users.setLastName(user.getLastName());
-        users.setEmail(user.getEmail());
-        users.setPassword(user.getPassword());
-        users.setAddress(user.getAddress());
-        users.setPhone(user.getPhone());
-        users.setType(user.getType());
-        users.setCreateAt(user.getCreateAt());
+        User userRequest = modelMapper.map(userRegistrationDTO,User.class);
+        users.setFirstName(userRegistrationDTO.getFirstName());
+        users.setLastName(userRegistrationDTO.getLastName());
+        users.setEmail(userRegistrationDTO.getEmail());
+        users.setPassword(userRegistrationDTO.getPassword());
+        users.setAddress(userRegistrationDTO.getAddress());
+        users.setPhone(userRegistrationDTO.getPhone());
+        users.setCreateAt(userRegistrationDTO.getCreateAt());
         usersRepository.save(users);
-        return users;
+        return modelMapper.map(userRequest,UserDTO.class);
     }
     @Override
     public void deleteUser(int id) {
         usersRepository.deleteById(id);
     }
+
 }

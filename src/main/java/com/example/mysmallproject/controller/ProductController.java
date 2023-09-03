@@ -1,4 +1,6 @@
 package com.example.mysmallproject.controller;
+import com.example.mysmallproject.dto.ProductCreationDTO;
+import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.entity.Image;
 import com.example.mysmallproject.entity.Product;
 import com.example.mysmallproject.repository.ProductRepository;
@@ -6,7 +8,9 @@ import com.example.mysmallproject.service.ImageService;
 import com.example.mysmallproject.service.ProductService;
 import com.example.mysmallproject.specification.ProductSpecification;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,37 +26,47 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping(value = "/products")
 @Validated
+@RequiredArgsConstructor
 @Slf4j
 public class ProductController {
-    @Autowired
-    private ProductService productsService;
-    @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductService productsService;
+    private final ImageService imageService;
+    private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
     @PostMapping(value = "/addNewProducts")
-    public ResponseEntity<Product> saveProduct(@Valid @RequestBody Product product){
+    public ResponseEntity<ProductDTO> saveProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO){
+        Product productRequest = modelMapper.map(productCreationDTO,Product.class);
+        Product product = productsService.saveProduct(productRequest);
+        ProductDTO productResponse = modelMapper.map(product,ProductDTO.class);
         log.debug("Products has been added");
-        return new ResponseEntity<>(productsService.saveProduct(product),HttpStatus.CREATED);
+        return new ResponseEntity<>(productResponse,HttpStatus.CREATED);
     }
     @GetMapping(value = "/getAll")
-    public ResponseEntity<List<Product>> getAllProduct(){
+    public ResponseEntity<List<ProductDTO>> getAllProduct(){
         log.debug("Get all information of products......");
-        return new ResponseEntity<>(productsService.getAllProduct(),HttpStatus.OK);
+        return new ResponseEntity<>(productsService.getAllProduct()
+                .stream()
+                .map(pro->modelMapper.map(pro,ProductDTO.class))
+                .collect(Collectors.toList()),HttpStatus.OK);
     }
     @GetMapping(value = "/getById/{id}")
-    public ResponseEntity<Product> getProductByID (@PathVariable("id") int id){
+    public ResponseEntity<ProductDTO> getProductByID (@PathVariable("id") int id){
+        Product productRequest = productsService.getById(id);
         log.debug("Get successful the product has id {}",id);
-        return new ResponseEntity<>(productsService.getById(id),HttpStatus.OK);
+        return new ResponseEntity<>(modelMapper.map(productRequest,ProductDTO.class),HttpStatus.OK);
     }
     @PutMapping(value = "/updateById/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable("id") int id){
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id){
+        Product productRequest = modelMapper.map(productCreationDTO,Product.class);
+        Product product = productsService.updateProduct(productRequest,id);
         log.debug("This user who id is {} was updated.......",id);
-        return new ResponseEntity<>(productsService.updateProduct(product,id),HttpStatus.OK);
+        return new ResponseEntity<>(modelMapper.map(product,ProductDTO.class),HttpStatus.OK);
     }
     @DeleteMapping(value = "/deleteById/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id){
