@@ -24,30 +24,30 @@ public class UsersController {
     @PostMapping(value = "/addNewUsers")
     public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) throws IllegalAccessException {
         try{
-            log.debug(GlobalExceptionHandler.ADDED);
+            log.debug("The user has been added !!! ");
             return new ResponseEntity<>(usersService.saveUser(userRegistrationDTO),HttpStatus.CREATED);
         }catch (IllegalStateException exception){
-            log.error(GlobalExceptionHandler.ERROR);
+            log.error("Could not add this user !!! ");
             throw new IllegalStateException(exception.getMessage());
         }
     }
     @GetMapping(value = "/getAllUsers")
     public ResponseEntity<List<UserDTO>> getUsers(){
         try{
-            log.debug(GlobalExceptionHandler.GET_USER);
+            log.debug("Get all information of users !!! ");
             return new ResponseEntity<>(usersService.getUser(),HttpStatus.OK);
         }catch (IllegalStateException exception){
-            log.error(GlobalExceptionHandler.NOT_FOUND);
+            log.error("Something went wrong while getting the information of users");
             throw new IllegalStateException(exception.getMessage());
         }
     }
     @GetMapping(value = "/getUserById/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") int id){
         try {
-            log.debug(GlobalExceptionHandler.GET_USER + "{}",id);
+            log.debug("Get the user has id : {}",id);
             return new ResponseEntity<>(usersService.getUserById(id), HttpStatus.OK);
         }catch (IllegalStateException exception) {
-            log.error(GlobalExceptionHandler.NOT_FOUND);
+            log.error("Not found for user has id : {}",id);
             throw new IllegalStateException(exception.getMessage());
         }
     }
@@ -55,10 +55,10 @@ public class UsersController {
     public ResponseEntity<String> updateUser (@RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id){
         try{
             usersService.updateUser(userRegistrationDTO, id);
-            log.debug(GlobalExceptionHandler.UPDATED);
+            log.debug("This user's information has updated !!! ");
             return new ResponseEntity<>("Update successful", HttpStatus.OK);
         }catch (IllegalStateException exception) {
-            log.error(GlobalExceptionHandler.NOT_FOUND);
+            log.error("This user's information not found !!! ");
             throw new IllegalStateException(exception.getMessage());
         }
 
@@ -80,10 +80,10 @@ public class UsersController {
     {
         try{
             Page<UserDTO> userDTOPage =  usersService.filter(address,search, sortBy, offset, pageSize);
-            log.debug(GlobalExceptionHandler.GET_USER);
+            log.debug("Successfully get the user information !!! ");
             return ResponseEntity.ok().body(userDTOPage);
         }catch (IllegalStateException exception){
-            log.error(GlobalExceptionHandler.NOT_FOUND);
+            log.error("Something went wrong while getting user information !!! ");
             throw new IllegalStateException(exception.getMessage());
         }
     }
