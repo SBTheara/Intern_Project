@@ -3,18 +3,13 @@ import com.example.mysmallproject.dto.ProductCreationDTO;
 import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.entity.Image;
 import com.example.mysmallproject.entity.Product;
-import com.example.mysmallproject.repository.ProductRepository;
+import com.example.mysmallproject.exception.GlobalExceptionHandler;
 import com.example.mysmallproject.service.ImageService;
 import com.example.mysmallproject.service.ProductService;
-import com.example.mysmallproject.specification.ProductSpecification;
-import com.example.mysmallproject.utils.ProductDTOConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping(value = "/products")
@@ -35,37 +28,46 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final ProductService productsService;
     private final ImageService imageService;
-    private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
-    private final ProductDTOConverter productDTOConverter;
     @PostMapping(value = "/addNewProducts")
     public ResponseEntity<ProductDTO> saveProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO){
-        Product productRequest = productDTOConverter.convertProductDTOtoProduct(productCreationDTO);
-        Product product = productsService.saveProduct(productRequest);
-        ProductDTO productResponse = productDTOConverter.convertProductToProductDTO(product);
-        log.debug("Products has been added");
-        return new ResponseEntity<>(productResponse,HttpStatus.CREATED);
+        try{
+            log.debug("Product has been add successful !!!");
+            return new ResponseEntity<>(productsService.saveProduct(productCreationDTO),HttpStatus.CREATED);
+        }catch (IllegalStateException exception){
+            log.error("Failed to add new product");
+            throw new IllegalStateException(GlobalExceptionHandler.ERROR);
+        }
     }
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<ProductDTO>> getAllProduct(){
-        log.debug("Get all information of products......");
-        return new ResponseEntity<>(productsService.getAllProduct()
-                .stream()
-                .map(productDTOConverter::convertProductToProductDTO)
-                .collect(Collectors.toList()),HttpStatus.OK);
+        try{
+            log.debug("Get all information of products......");
+            return new ResponseEntity<>(productsService.getAllProduct(),HttpStatus.OK);
+        }catch (IllegalStateException exception){
+            log.error("Something went wrong !!!");
+            throw new IllegalStateException(GlobalExceptionHandler.NOT_FOUND);
+        }
     }
     @GetMapping(value = "/getById/{id}")
     public ResponseEntity<ProductDTO> getProductByID (@PathVariable("id") int id){
-        Product productRequest = productsService.getById(id);
-        log.debug("Get successful the product has id {}",id);
-        return new ResponseEntity<>(productDTOConverter.convertProductToProductDTO(productRequest),HttpStatus.OK);
+        try{
+            log.debug("Get successful the product has id {}",id);
+            return new ResponseEntity<>(productsService.getById(id),HttpStatus.OK);
+        }catch (IllegalStateException exception){
+            log.error("Product not found !!!");
+            throw new IllegalStateException(GlobalExceptionHandler.NOT_FOUND);
+        }
     }
     @PutMapping(value = "/updateById/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id){
-        Product productRequest = productDTOConverter.convertProductDTOtoProduct(productCreationDTO);
-        Product product = productsService.updateProduct(productRequest,id);
-        log.debug("This user who id is {} was updated.......",id);
-        return new ResponseEntity<>(modelMapper.map(product,ProductDTO.class),HttpStatus.OK);
+    public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id){
+        try{
+            log.debug("This product who id is {} was updated.......",id);
+            return new ResponseEntity<>(modelMapper.map(productsService.updateProduct(productCreationDTO,id),ProductDTO.class),HttpStatus.OK);
+        }catch (IllegalStateException exception){
+            log.error("Could not update this product");
+            throw new IllegalStateException(exception.getMessage());
+        }
     }
     @DeleteMapping(value = "/deleteById/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id){
@@ -105,11 +107,11 @@ public class ProductController {
             @RequestParam(value = "pageSize") int pageSize
     )
     {
-        log.debug("Get the data from page has offset {},pagesize {} and sortby {}",offset,pageSize,field);
+        log.debug("Get the data from page has offset {},page-size {} and sort-by {}",offset,pageSize,field);
         return new ResponseEntity<>(productsService.getProductsByPaginationsAndSort(offset,pageSize,field),HttpStatus.OK);
     }
     @GetMapping(value = "/filterAndSearch",consumes = {MediaType.ALL_VALUE})
-    public Page<ProductDTO> filter(
+    public ResponseEntity<Page<ProductDTO>> filter(
             @RequestParam(name = "minPrice",required = false,defaultValue = "0") String minPrice,
             @RequestParam(name = "maxPrice",required = false,defaultValue = "0") String maxPrice,
             @RequestParam(name = "search",required = false) String search,
@@ -118,25 +120,13 @@ public class ProductController {
             @RequestParam(name = "pageSize",required = false,defaultValue = "10") int pageSize
     )
     {
-        Pageable pageable = PageRequest.of(offset,pageSize,Sort.by(Sort.Direction.ASC,sortBy));
-        if(minPrice.equals("0")&&maxPrice.equals("0")){
-            List<ProductDTO> pro =productRepository.findAll(pageable).stream().map(productDTOConverter::convertProductToProductDTO).toList();
-            Page<ProductDTO> productPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
-            log.debug("Get all products");
-            return productPage;
-        }
-        else if(maxPrice.equals("0")){
-            List<ProductDTO> pro = productRepository.findAll(ProductSpecification.filterMin(minPrice,search),pageable).stream().map(productDTOConverter::convertProductToProductDTO).collect(Collectors.toList());
-            Page<ProductDTO> productPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
-            log.debug("Get products start from {}",minPrice);
-            return productPage;
-        }
-        else {
-            List<ProductDTO> pro = productRepository.findAll(ProductSpecification.filterMaxAndMin(minPrice, maxPrice, search), pageable).stream().map(productDTOConverter::convertProductToProductDTO).toList();
-            Page<ProductDTO> productDTOPage = new PageImpl<>(pro,Pageable.unpaged(),pro.size());
-            log.debug("Get products has minPrice : {} maxPrice : {} and search : {} on page at offset : {}" +
-                    " pagesize : {} and sortBy : {}",minPrice,maxPrice,search,offset,pageSize,search);
-            return productDTOPage;
+        try{
+            Page<ProductDTO> productDTOS = productsService.fileterAndSearch(minPrice, maxPrice, search, sortBy, offset, pageSize);
+            log.debug("Product found !!!!");
+            return ResponseEntity.ok().body(productDTOS);
+        }catch (IllegalStateException exception){
+            log.error("Product not found !!!!");
+            throw new IllegalStateException(GlobalExceptionHandler.NOT_FOUND);
         }
     }
 }

@@ -20,7 +20,7 @@ logging:
     com.example.mysmallproject: DEBUG
     org.hibernate: ERROR
   file:
-    path: ./log/application.log
+    path: ./log/application
   logback:
     rolling policy:
       max-file-size: 1MB

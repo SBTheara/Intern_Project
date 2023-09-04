@@ -6,6 +6,7 @@ import com.example.mysmallproject.entity.User;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersService {
     UserDTO saveUser(UserRegistrationDTO userRegistrationDTO);
@@ -13,5 +14,5 @@ public interface UsersService {
     UserDTO getUserById(int id);
     UserDTO updateUser(UserRegistrationDTO userRegistrationDTO, int id);
     void deleteUser(int id);
-    Page<UserDTO> filter (String address,String type,String search,String sortBy,int offset,int pageSize);
+    Page<UserDTO> filter (String address,String search,String sortBy,int offset,int pageSize);
 }

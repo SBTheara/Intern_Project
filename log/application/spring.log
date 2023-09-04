@@ -1,0 +1,167 @@
+2023-09-04T15:35:20.042+07:00  INFO 9064 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 17.0.4.1 with PID 9064 (D:\lessons\Intern_Project\target\classes started by Theara in D:\lessons\Intern_Project)
+2023-09-04T15:35:20.045+07:00 DEBUG 9064 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-04T15:35:20.046+07:00  INFO 9064 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-04T15:35:21.211+07:00  INFO 9064 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-04T15:35:21.305+07:00  INFO 9064 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 83 ms. Found 3 JPA repository interfaces.
+2023-09-04T15:35:22.036+07:00  INFO 9064 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-04T15:35:22.052+07:00  INFO 9064 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-04T15:35:22.053+07:00  INFO 9064 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-04T15:35:22.205+07:00  INFO 9064 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-04T15:35:22.205+07:00  INFO 9064 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2082 ms
+2023-09-04T15:35:22.892+07:00  INFO 9064 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-04T15:35:22.915+07:00  INFO 9064 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-04T15:35:23.345+07:00  INFO 9064 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1573e8a5
+2023-09-04T15:35:23.348+07:00  INFO 9064 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-04T15:35:24.941+07:00  INFO 9064 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:35:25.789+07:00  WARN 9064 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-04T15:35:26.719+07:00  INFO 9064 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-04T15:35:26.741+07:00  INFO 9064 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 7.538 seconds (process running for 8.869)
+2023-09-04T15:35:38.290+07:00  INFO 9064 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-04T15:35:38.290+07:00  INFO 9064 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-04T15:35:38.291+07:00  INFO 9064 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-09-04T15:35:38.629+07:00 DEBUG 9064 --- [http-nio-8888-exec-2] c.e.m.controller.UsersController         : New user has been added !!!!!
+2023-09-04T15:36:23.067+07:00  INFO 9064 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:36:23.069+07:00  INFO 9064 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-04T15:36:23.081+07:00  INFO 9064 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-04T15:36:28.313+07:00  INFO 15340 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 17.0.4.1 with PID 15340 (D:\lessons\Intern_Project\target\classes started by Theara in D:\lessons\Intern_Project)
+2023-09-04T15:36:28.316+07:00 DEBUG 15340 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-04T15:36:28.317+07:00  INFO 15340 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-04T15:36:29.459+07:00  INFO 15340 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-04T15:36:29.565+07:00  INFO 15340 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 3 JPA repository interfaces.
+2023-09-04T15:36:30.211+07:00  INFO 15340 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-04T15:36:30.222+07:00  INFO 15340 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-04T15:36:30.223+07:00  INFO 15340 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-04T15:36:30.334+07:00  INFO 15340 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-04T15:36:30.335+07:00  INFO 15340 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1943 ms
+2023-09-04T15:36:30.950+07:00  INFO 15340 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-04T15:36:30.971+07:00  INFO 15340 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-04T15:36:31.390+07:00  INFO 15340 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@79d4ff58
+2023-09-04T15:36:31.394+07:00  INFO 15340 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-04T15:36:33.017+07:00  INFO 15340 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:36:33.691+07:00  WARN 15340 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-04T15:36:33.848+07:00 DEBUG 15340 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2023-09-04T15:36:33.978+07:00 DEBUG 15340 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 19 mappings in 'requestMappingHandlerMapping'
+2023-09-04T15:36:34.007+07:00 DEBUG 15340 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2023-09-04T15:36:34.020+07:00 DEBUG 15340 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2023-09-04T15:36:34.173+07:00  INFO 15340 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-04T15:36:34.191+07:00  INFO 15340 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 6.709 seconds (process running for 7.84)
+2023-09-04T15:37:51.086+07:00  INFO 15340 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-04T15:37:51.086+07:00  INFO 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-04T15:37:51.087+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-09-04T15:37:51.087+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2023-09-04T15:37:51.087+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2023-09-04T15:37:51.089+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@1013aa94
+2023-09-04T15:37:51.090+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@1e9b0c92
+2023-09-04T15:37:51.090+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-09-04T15:37:51.091+07:00  INFO 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2023-09-04T15:37:51.103+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/users/getUserById/1", parameters={}
+2023-09-04T15:37:51.128+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.mysmallproject.controller.UsersController#getUserById(int)
+2023-09-04T15:37:51.171+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] c.e.m.controller.UsersController         : User found for id: 1!!!!!
+2023-09-04T15:37:51.395+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-09-04T15:37:51.401+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [UserDTO(id=1, firstName=Mi, lastName=LuLu, email=Miluluzin2@gmail.com, address=takeo, phone=012 334  (truncated)...]
+2023-09-04T15:37:51.432+07:00 DEBUG 15340 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2023-09-04T15:37:55.997+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/users/getUserById/10000", parameters={}
+2023-09-04T15:37:55.998+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.mysmallproject.controller.UsersController#getUserById(int)
+2023-09-04T15:37:55.999+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] c.e.m.controller.UsersController         : User found for id: 10000!!!!!
+2023-09-04T15:37:56.003+07:00 ERROR 15340 --- [http-nio-8888-exec-4] c.e.m.controller.UsersController         : Not found for this user !!! 
+2023-09-04T15:37:56.006+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.mysmallproject.exception.GlobalExceptionHandler#handlerException(IllegalStateException)
+2023-09-04T15:37:56.010+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2023-09-04T15:37:56.010+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["This user not found !!!  null"]
+2023-09-04T15:37:56.012+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalStateException: This user not found !!!  null]
+2023-09-04T15:37:56.013+07:00 DEBUG 15340 --- [http-nio-8888-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 400 BAD_REQUEST
+2023-09-04T15:40:25.520+07:00  INFO 15340 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:40:25.522+07:00  INFO 15340 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-04T15:40:25.532+07:00  INFO 15340 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-04T15:40:34.261+07:00  INFO 3916 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 17.0.4.1 with PID 3916 (D:\lessons\Intern_Project\target\classes started by Theara in D:\lessons\Intern_Project)
+2023-09-04T15:40:34.264+07:00 DEBUG 3916 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-04T15:40:34.265+07:00  INFO 3916 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-04T15:40:35.489+07:00  INFO 3916 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-04T15:40:35.612+07:00  INFO 3916 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 108 ms. Found 3 JPA repository interfaces.
+2023-09-04T15:40:36.314+07:00  INFO 3916 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-04T15:40:36.328+07:00  INFO 3916 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-04T15:40:36.328+07:00  INFO 3916 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-04T15:40:36.464+07:00  INFO 3916 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-04T15:40:36.464+07:00  INFO 3916 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2108 ms
+2023-09-04T15:40:37.157+07:00  INFO 3916 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-04T15:40:37.180+07:00  INFO 3916 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-04T15:40:37.693+07:00  INFO 3916 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@79d4ff58
+2023-09-04T15:40:37.697+07:00  INFO 3916 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-04T15:40:39.317+07:00  INFO 3916 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:40:39.935+07:00  WARN 3916 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-04T15:40:40.086+07:00 DEBUG 3916 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2023-09-04T15:40:40.237+07:00 DEBUG 3916 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 19 mappings in 'requestMappingHandlerMapping'
+2023-09-04T15:40:40.266+07:00 DEBUG 3916 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2023-09-04T15:40:40.279+07:00 DEBUG 3916 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2023-09-04T15:40:40.449+07:00  INFO 3916 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-04T15:40:40.467+07:00  INFO 3916 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 7.165 seconds (process running for 8.436)
+2023-09-04T15:41:07.787+07:00  INFO 3916 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:41:07.789+07:00  INFO 3916 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-04T15:41:07.799+07:00  INFO 3916 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-04T15:41:14.966+07:00  INFO 12720 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 17.0.4.1 with PID 12720 (D:\lessons\Intern_Project\target\classes started by Theara in D:\lessons\Intern_Project)
+2023-09-04T15:41:14.969+07:00 DEBUG 12720 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-04T15:41:14.970+07:00  INFO 12720 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-04T15:41:16.071+07:00  INFO 12720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-04T15:41:16.181+07:00  INFO 12720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 88 ms. Found 3 JPA repository interfaces.
+2023-09-04T15:41:16.859+07:00  INFO 12720 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-04T15:41:16.871+07:00  INFO 12720 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-04T15:41:16.871+07:00  INFO 12720 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-04T15:41:17.009+07:00  INFO 12720 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-04T15:41:17.010+07:00  INFO 12720 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1960 ms
+2023-09-04T15:41:17.671+07:00  INFO 12720 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-04T15:41:17.692+07:00  INFO 12720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-04T15:41:18.136+07:00  INFO 12720 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@395281c2
+2023-09-04T15:41:18.139+07:00  INFO 12720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-04T15:41:19.737+07:00  INFO 12720 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:41:20.376+07:00  WARN 12720 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-04T15:41:20.528+07:00 DEBUG 12720 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2023-09-04T15:41:20.668+07:00 DEBUG 12720 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 19 mappings in 'requestMappingHandlerMapping'
+2023-09-04T15:41:20.697+07:00 DEBUG 12720 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2023-09-04T15:41:20.709+07:00 DEBUG 12720 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2023-09-04T15:41:20.848+07:00  INFO 12720 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-04T15:41:20.857+07:00  INFO 12720 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 6.702 seconds (process running for 7.925)
+2023-09-04T15:41:56.273+07:00  INFO 12720 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-04T15:41:56.274+07:00  INFO 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-04T15:41:56.274+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2023-09-04T15:41:56.274+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2023-09-04T15:41:56.275+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2023-09-04T15:41:56.276+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@11b74ecb
+2023-09-04T15:41:56.276+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@74cf2d5f
+2023-09-04T15:41:56.277+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2023-09-04T15:41:56.277+07:00  INFO 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-09-04T15:41:56.289+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : PUT "/users/updateUsers/1000", parameters={}
+2023-09-04T15:41:56.307+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.mysmallproject.controller.UsersController#updateUser(UserRegistrationDTO, int)
+2023-09-04T15:41:56.423+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [UserRegistrationDTO(firstName=Mi, lastName=LuLu, email=Miluluzin2@gmail.com, password=135644, addres (truncated)...]
+2023-09-04T15:41:56.546+07:00 ERROR 12720 --- [http-nio-8888-exec-2] c.e.m.controller.UsersController         : Not found and couldn't be update for this user !!!
+2023-09-04T15:41:56.548+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.mysmallproject.exception.GlobalExceptionHandler#handlerException(IllegalStateException)
+2023-09-04T15:41:56.562+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2023-09-04T15:41:56.563+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Not found for this user"]
+2023-09-04T15:41:56.575+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalStateException: Not found for this user]
+2023-09-04T15:41:56.576+07:00 DEBUG 12720 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 400 BAD_REQUEST
+2023-09-04T15:43:54.219+07:00  INFO 12720 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:43:54.222+07:00  INFO 12720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-04T15:43:54.233+07:00  INFO 12720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-09-04T15:44:00.793+07:00  INFO 11772 --- [main] c.e.m.MySmallProjectApplication          : Starting MySmallProjectApplication using Java 17.0.4.1 with PID 11772 (D:\lessons\Intern_Project\target\classes started by Theara in D:\lessons\Intern_Project)
+2023-09-04T15:44:00.796+07:00 DEBUG 11772 --- [main] c.e.m.MySmallProjectApplication          : Running with Spring Boot v3.1.2, Spring v6.0.11
+2023-09-04T15:44:00.798+07:00  INFO 11772 --- [main] c.e.m.MySmallProjectApplication          : No active profile set, falling back to 1 default profile: "default"
+2023-09-04T15:44:01.922+07:00  INFO 11772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-04T15:44:02.032+07:00  INFO 11772 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 3 JPA repository interfaces.
+2023-09-04T15:44:02.675+07:00  INFO 11772 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2023-09-04T15:44:02.687+07:00  INFO 11772 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-09-04T15:44:02.687+07:00  INFO 11772 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-09-04T15:44:02.799+07:00  INFO 11772 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-09-04T15:44:02.799+07:00  INFO 11772 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1924 ms
+2023-09-04T15:44:03.423+07:00  INFO 11772 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-04T15:44:03.444+07:00  INFO 11772 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-09-04T15:44:03.849+07:00  INFO 11772 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7e8f23ad
+2023-09-04T15:44:03.852+07:00  INFO 11772 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-09-04T15:44:05.373+07:00  INFO 11772 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T15:44:05.959+07:00  WARN 11772 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-09-04T15:44:06.424+07:00  INFO 11772 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2023-09-04T15:44:06.434+07:00  INFO 11772 --- [main] c.e.m.MySmallProjectApplication          : Started MySmallProjectApplication in 6.486 seconds (process running for 7.612)
+2023-09-04T15:44:12.288+07:00  INFO 11772 --- [http-nio-8888-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-04T15:44:12.289+07:00  INFO 11772 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-09-04T15:44:12.290+07:00  INFO 11772 --- [http-nio-8888-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-09-04T15:44:12.532+07:00 ERROR 11772 --- [http-nio-8888-exec-2] c.e.m.controller.UsersController         : Not found and couldn't be update for this user !!!
+2023-09-04T16:20:41.236+07:00  INFO 11772 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-04T16:20:41.239+07:00  INFO 11772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-09-04T16:20:41.246+07:00  INFO 11772 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
