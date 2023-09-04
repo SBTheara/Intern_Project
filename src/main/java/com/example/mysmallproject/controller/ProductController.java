@@ -33,37 +33,17 @@ public class ProductController {
     public ResponseEntity<ProductDTO> saveProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO){
         try{
             log.debug("Product has been add successful !!!");
-            return new ResponseEntity<>(productsService.saveProduct(productCreationDTO),HttpStatus.CREATED);
+            return new ResponseEntity<>(productsService.save(productCreationDTO),HttpStatus.CREATED);
         }catch (IllegalStateException exception){
             log.error("Failed to add new product");
             throw new IllegalStateException(GlobalExceptionHandler.ERROR);
-        }
-    }
-    @GetMapping(value = "/getAll")
-    public ResponseEntity<List<ProductDTO>> getAllProduct(){
-        try{
-            log.debug("Get all information of products......");
-            return new ResponseEntity<>(productsService.getAllProduct(),HttpStatus.OK);
-        }catch (IllegalStateException exception){
-            log.error("Something went wrong !!!");
-            throw new IllegalStateException(GlobalExceptionHandler.NOT_FOUND);
-        }
-    }
-    @GetMapping(value = "/getById/{id}")
-    public ResponseEntity<ProductDTO> getProductByID (@PathVariable("id") int id){
-        try{
-            log.debug("Get successful the product has id {}",id);
-            return new ResponseEntity<>(productsService.getById(id),HttpStatus.OK);
-        }catch (IllegalStateException exception){
-            log.error("Product not found !!!");
-            throw new IllegalStateException(GlobalExceptionHandler.NOT_FOUND);
         }
     }
     @PutMapping(value = "/updateById/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id){
         try{
             log.debug("This product who id is {} was updated.......",id);
-            return new ResponseEntity<>(modelMapper.map(productsService.updateProduct(productCreationDTO,id),ProductDTO.class),HttpStatus.OK);
+            return new ResponseEntity<>(modelMapper.map(productsService.update(productCreationDTO,id),ProductDTO.class),HttpStatus.OK);
         }catch (IllegalStateException exception){
             log.error("Could not update this product");
             throw new IllegalStateException(exception.getMessage());
@@ -71,7 +51,7 @@ public class ProductController {
     }
     @DeleteMapping(value = "/deleteById/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id){
-        productsService.deleteProducts(id);
+        productsService.delete(id);
         log.debug("This user was deleted......");
         return new ResponseEntity<>("Delete successful",HttpStatus.OK);
     }
@@ -94,23 +74,7 @@ public class ProductController {
         imageService.deleteFile(fileName);
         log.debug("Image was deleted");
     }
-    @GetMapping(value = "/pagination")
-    public ResponseEntity<Page<Product>> getProductWithPagination(@RequestParam(name = "offset") int offset ,
-                                                                  @RequestParam(name= "pageSize") int pageSize){
-        log.debug("Get data at offset: {} and pageSize: {}",offset,pageSize);
-        return new ResponseEntity<>(productsService.getProductsByPagination(offset,pageSize),HttpStatus.OK);
-    }
-    @GetMapping(value = "/paginationAndSort")
-    public ResponseEntity<Page<Product>> getProductWithPaginationAndSort   (
-            @RequestParam(value = "field") String field,
-            @RequestParam(value = "offset") int offset,
-            @RequestParam(value = "pageSize") int pageSize
-    )
-    {
-        log.debug("Get the data from page has offset {},page-size {} and sort-by {}",offset,pageSize,field);
-        return new ResponseEntity<>(productsService.getProductsByPaginationsAndSort(offset,pageSize,field),HttpStatus.OK);
-    }
-    @GetMapping(value = "/filterAndSearch",consumes = {MediaType.ALL_VALUE})
+    @GetMapping(value = "/filterAndSearch")
     public ResponseEntity<Page<ProductDTO>> filter(
             @RequestParam(name = "minPrice",required = false,defaultValue = "0") String minPrice,
             @RequestParam(name = "maxPrice",required = false,defaultValue = "0") String maxPrice,

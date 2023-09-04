@@ -22,39 +22,19 @@ import java.util.List;
 public class UsersController {
     private final UsersService usersService;
     @PostMapping(value = "/addNewUsers")
-    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) throws IllegalAccessException {
+    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
         try{
             log.debug("The user has been added !!! ");
-            return new ResponseEntity<>(usersService.saveUser(userRegistrationDTO),HttpStatus.CREATED);
+            return new ResponseEntity<>(usersService.save(userRegistrationDTO),HttpStatus.CREATED);
         }catch (IllegalStateException exception){
             log.error("Could not add this user !!! ");
-            throw new IllegalStateException(exception.getMessage());
-        }
-    }
-    @GetMapping(value = "/getAllUsers")
-    public ResponseEntity<List<UserDTO>> getUsers(){
-        try{
-            log.debug("Get all information of users !!! ");
-            return new ResponseEntity<>(usersService.getUser(),HttpStatus.OK);
-        }catch (IllegalStateException exception){
-            log.error("Something went wrong while getting the information of users");
-            throw new IllegalStateException(exception.getMessage());
-        }
-    }
-    @GetMapping(value = "/getUserById/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "id") int id){
-        try {
-            log.debug("Get the user has id : {}",id);
-            return new ResponseEntity<>(usersService.getUserById(id), HttpStatus.OK);
-        }catch (IllegalStateException exception) {
-            log.error("Not found for user has id : {}",id);
             throw new IllegalStateException(exception.getMessage());
         }
     }
     @PutMapping(value = "/updateUsers/{id}")
     public ResponseEntity<String> updateUser (@RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id){
         try{
-            usersService.updateUser(userRegistrationDTO, id);
+            usersService.update(userRegistrationDTO, id);
             log.debug("This user's information has updated !!! ");
             return new ResponseEntity<>("Update successful", HttpStatus.OK);
         }catch (IllegalStateException exception) {
@@ -65,7 +45,7 @@ public class UsersController {
     }
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteUsers(@PathVariable(name = "id") int id){
-        usersService.deleteUser(id);
+        usersService.delete(id);
         log.debug(GlobalExceptionHandler.DELETED);
         return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
