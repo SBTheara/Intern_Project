@@ -3,13 +3,16 @@ package com.example.mysmallproject.service;
 import com.example.mysmallproject.dto.UserDTO;
 import com.example.mysmallproject.dto.UserRegistrationDTO;
 import com.example.mysmallproject.entity.User;
+import com.example.mysmallproject.exception.ApiError;
 import com.example.mysmallproject.repository.UsersRepository;
 import com.example.mysmallproject.specification.UserSpecification;
 import io.micrometer.common.util.StringUtils;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +31,7 @@ public class UsersService implements HelperGenerics<UserDTO, UserRegistrationDTO
       User user = usersRepository.save(userRequest);
       log.debug("The user has been added !!! ");
       return modelMapper.map(user, UserDTO.class);
-    } catch (IllegalStateException exception) {
+    } catch (ConstraintViolationException exception) {
       log.error("Could not add this user !!! ");
       return null;
     }

@@ -2,6 +2,7 @@ package com.example.mysmallproject.service;
 import com.example.mysmallproject.dto.ProductCreationDTO;
 import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.entity.Product;
+import com.example.mysmallproject.exception.ProductNotFoundException;
 import com.example.mysmallproject.repository.ProductRepository;
 import com.example.mysmallproject.specification.ProductSpecification;
 import com.example.mysmallproject.utils.ProductDTOConverter;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
@@ -65,9 +67,9 @@ public class ProductService implements HelperGenerics<ProductDTO, ProductCreatio
                 .toList();
         log.debug("Product found !!!!");
         return new PageImpl<>(pro, Pageable.unpaged(), pro.size());
-    } catch (IllegalStateException exception) {
+    } catch (NoSuchElementException exception) {
         log.error("Product not found !!!!");
-      return null;
+        throw new ProductNotFoundException(exception.getMessage(),exception.getCause());
     }
   }
   @Override

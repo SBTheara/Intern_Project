@@ -2,6 +2,7 @@ package com.example.mysmallproject.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,7 +19,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(IllegalStateException.class)
   public ResponseEntity<?> handlerException(IllegalStateException exception) {
-    return ResponseEntity.badRequest().body(exception.getMessage());
+    return ResponseEntity.badRequest().build();
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
@@ -29,4 +30,14 @@ public class GlobalExceptionHandler {
             exception.getConstraintViolations().stream()
                 .map(violation -> violation.getPropertyPath() + " : " + violation.getMessage()));
   }
+  @ExceptionHandler(ProductNotFoundException.class)
+  public ResponseEntity<ApiError> productNotFoundException ( ProductNotFoundException productNotFoundException){
+    ApiError error = new ApiError(
+            HttpStatus.NOT_FOUND,
+            productNotFoundException.getMessage(),
+            productNotFoundException.getCause()
+    );
+    return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
+  }
+
 }

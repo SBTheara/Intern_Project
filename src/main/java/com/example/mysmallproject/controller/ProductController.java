@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 
 @RestController
@@ -23,59 +24,58 @@ import java.io.IOException;
 @Validated
 @RequiredArgsConstructor
 public class ProductController {
-  private final ProductService productsService;
-  private final ImageService imageService;
-  private final ModelMapper modelMapper;
+    private final ProductService productsService;
+    private final ImageService imageService;
+    private final ModelMapper modelMapper;
 
-  @PostMapping(value = "/add-new-product")
-  public ResponseEntity<ProductDTO> saveProduct(
-      @Valid @RequestBody ProductCreationDTO productCreationDTO) {
-    return new ResponseEntity<>(productsService.save(productCreationDTO), HttpStatus.CREATED);
-  }
+    @PostMapping(value = "/add-new-product")
+    public ResponseEntity<ProductDTO> saveProduct(
+            @Valid @RequestBody ProductCreationDTO productCreationDTO) {
+        return new ResponseEntity<>(productsService.save(productCreationDTO), HttpStatus.CREATED);
+    }
 
-  @PutMapping(value = "/update-by-id/{id}")
-  public ResponseEntity<ProductDTO> updateProduct(
-      @Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id) {
+    @PutMapping(value = "/update-by-id/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(
+            @Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id) {
 
-    return new ResponseEntity<>(
-        modelMapper.map(productsService.update(productCreationDTO, id), ProductDTO.class),
-        HttpStatus.OK);
-  }
+        return new ResponseEntity<>(
+                modelMapper.map(productsService.update(productCreationDTO, id), ProductDTO.class),
+                HttpStatus.OK);
+    }
 
-  @DeleteMapping(value = "/delete-by-id/{id}")
-  public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id) {
-    productsService.delete(id);
-    return new ResponseEntity<>("Delete successful", HttpStatus.OK);
-  }
+    @DeleteMapping(value = "/delete-by-id/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id) {
+        productsService.delete(id);
+        return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+    }
 
-  @PostMapping("/image/upload")
-  public ResponseEntity<?> uploadImage(@RequestParam(name = "image") MultipartFile file)
-      throws IOException {
-    Image image = imageService.uploadImage(file);
-    return ResponseEntity.status(HttpStatus.OK).body(image.getName());
-  }
+    @PostMapping("/image/upload")
+    public ResponseEntity<?> uploadImage(@RequestParam(name = "image") MultipartFile file)
+            throws IOException {
+        Image image = imageService.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.OK).body(image.getName());
+    }
 
-  @GetMapping("/image/get/{filename}")
-  public ResponseEntity<?> downloadImage(@PathVariable(name = "filename") String fileName)
-      throws IOException {
-    byte[] img = imageService.downloadImage(fileName);
-    return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(img);
-  }
+    @GetMapping("/image/get/{filename}")
+    public ResponseEntity<?> downloadImage(@PathVariable(name = "filename") String fileName)
+            throws IOException {
+        byte[] img = imageService.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(img);
+    }
 
-  @DeleteMapping("/image/delete/{filename}")
-  public void deleteFile(@PathVariable("filename") String fileName) throws IOException {
-    imageService.deleteFile(fileName);
-  }
+    @DeleteMapping("/image/delete/{filename}")
+    public void deleteFile(@PathVariable("filename") String fileName) throws IOException {
+        imageService.deleteFile(fileName);
+    }
 
-  @GetMapping(value = "/filter-and-search")
-  public ResponseEntity<Page<ProductDTO>> filter(
-      @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
-      @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,
-      @RequestParam(name = "search", required = false) String search,
-      @RequestParam(name = "sort-by", required = false, defaultValue = "name") String sortBy,
-      @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-      @RequestParam(name = "page-size", required = false, defaultValue = "10") int pageSize)
-  {
-      return ResponseEntity.ok().body(productsService.filterAndSearch(minPrice, maxPrice, search, sortBy, offset, pageSize));
-  }
+    @GetMapping(value = "/filter-and-search")
+    public ResponseEntity<Page<ProductDTO>> filter(
+            @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
+            @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,
+            @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "sort-by", required = false, defaultValue = "name") String sortBy,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "page-size", required = false, defaultValue = "10") int pageSize) {
+        return ResponseEntity.ok().body(productsService.filterAndSearch(minPrice, maxPrice, search, sortBy, offset, pageSize));
+    }
 }
