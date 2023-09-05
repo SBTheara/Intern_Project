@@ -17,8 +17,8 @@ import java.util.Date;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "productId")
-    private int id;
+    @Column(name = "product_id",columnDefinition = "bigint(20)")
+    private long id;
     @NotNull
     @NotBlank(message = "Please enter the name of the products")
     private String name;

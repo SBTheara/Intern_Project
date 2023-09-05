@@ -6,7 +6,6 @@ import com.example.mysmallproject.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
 @Component
 @RequiredArgsConstructor
 public class ProductDTOConverter {

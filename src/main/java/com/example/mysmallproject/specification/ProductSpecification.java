@@ -1,40 +1,34 @@
 package com.example.mysmallproject.specification;
 import com.example.mysmallproject.entity.Product;
+import com.example.mysmallproject.entity.Product_;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
 @Component
 public class ProductSpecification {
-    public static Specification<Product> search (String field){
-        String param = "%"+field.replaceAll("\\s","").toUpperCase()+"%";
-        return (root, query, criteriaBuilder) -> criteriaBuilder.or(
-                criteriaBuilder.like(
-                        criteriaBuilder.upper(root.get("name")),param),
-                        criteriaBuilder.like(criteriaBuilder.toString(root.get("price")),field)
-        );
+  public static Specification<Product> filterMaxAndMin(
+      double minPrice, double maxPrice, String search) {
+    if (minPrice != 0 && maxPrice != 0 && StringUtils.isNotEmpty(search)) {
+      return (root, query, criteriaBuilder) ->
+          criteriaBuilder.and(
+              criteriaBuilder.or(
+                  criteriaBuilder.like(
+                      criteriaBuilder.upper(root.get(Product_.NAME)),
+                      "%" + search.replaceAll("\\s", "").toUpperCase() + "%"),
+                  criteriaBuilder.like(criteriaBuilder.toString(root.get("id")), search)),
+              criteriaBuilder.between(root.get(Product_.PRICE), minPrice, maxPrice));
     }
-    public static Specification<Product> filterMaxAndMin(String minPrice, String maxPrice,String search){
-        if(minPrice!=null && maxPrice!=null &&search!=null){
-            return (root, query, criteriaBuilder) -> criteriaBuilder.and(
-                   criteriaBuilder.or(
-                                    criteriaBuilder.like(criteriaBuilder.upper(root.get("name")),"%"+search.replaceAll("\\s","").toUpperCase()+"%"),
-                                    criteriaBuilder.like(criteriaBuilder.toString(root.get("id")),search)),
-                    criteriaBuilder.between(root.get("price"),minPrice,maxPrice)
-            );
-        }else {
-            return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
-        }
+    if (minPrice != 0) {
+      return (root, query, criteriaBuilder) ->
+          criteriaBuilder.and(
+              criteriaBuilder.ge(root.get(Product_.PRICE), minPrice),
+              criteriaBuilder.or(
+                  criteriaBuilder.like(
+                      criteriaBuilder.upper(root.get(Product_.NAME)),
+                      "%" + search.replaceAll("\\s", "").toUpperCase() + "%"),
+                  criteriaBuilder.like(criteriaBuilder.toString(root.get("id")), search)));
     }
-    public static Specification<Product> filterMin(String minPrice, String search){
-        if (minPrice!=null){
-            return (root, query, criteriaBuilder) ->criteriaBuilder.and(
-                            criteriaBuilder.ge(root.get("price"),Double.parseDouble(minPrice)),
-                            criteriaBuilder.or(
-                                    criteriaBuilder.like(criteriaBuilder.upper(root.get("name")),"%"+search.replaceAll("\\s","").toUpperCase()+"%"),
-                                    criteriaBuilder.like(criteriaBuilder.toString(root.get("id")),search))
-
-            );
-        }else {
-            return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
-        }
-    }
+    return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
+  }
 }

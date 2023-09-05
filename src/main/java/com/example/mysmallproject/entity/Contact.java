@@ -15,7 +15,8 @@ import java.util.Date;
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int contactId;
+    @Column(name = "contact_id",columnDefinition = "bigint(20)")
+    private long contactId;
     private String firstName;
     private String lastName;
     private String email;

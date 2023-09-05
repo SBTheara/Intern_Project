@@ -13,7 +13,8 @@ import lombok.*;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "image_id",columnDefinition = "bigint(20)")
+    private long id;
     @NotNull
     private String name;
     @NotNull

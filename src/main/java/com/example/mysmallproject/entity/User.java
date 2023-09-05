@@ -20,7 +20,8 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "user_id",columnDefinition = "bigint(20)")
+    private long id;
     @NotNull
     @NotBlank(message = "please input your firstname")
     private String firstName;

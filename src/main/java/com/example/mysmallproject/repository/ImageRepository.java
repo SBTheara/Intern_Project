@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ImageRepository extends JpaRepository<Image,Integer> {
+public interface ImageRepository extends JpaRepository<Image,Long> {
     Optional<Image> findByName(String filename);
-    Optional<Image> deleteFile_ImagesByName(String filename);
+    void deleteByName(String filename);
 }

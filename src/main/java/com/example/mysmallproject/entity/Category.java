@@ -18,8 +18,8 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="category_id")
-    private int id;
+    @Column(name="category_id",columnDefinition = "bigint(20)")
+    private long id;
     private String name;
     private String detail;
 }

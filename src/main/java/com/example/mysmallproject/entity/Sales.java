@@ -14,7 +14,8 @@ import java.util.Date;
 public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int saleAmount;
+    @Column(name = "sales_id",columnDefinition = "bigint(20)")
+    private long id;
+    private long saleAmount;
     private Date createAt;
 }

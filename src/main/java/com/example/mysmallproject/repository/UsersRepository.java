@@ -10,7 +10,5 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Component
-public interface UsersRepository extends JpaRepository<User,Integer> ,JpaSpecificationExecutor<User> {
-    Page<User> findAll(Specification<User> users, Pageable pageable);
+public interface UsersRepository extends JpaRepository<User,Long> ,JpaSpecificationExecutor<User> {
 }
