@@ -39,7 +39,14 @@ public class UsersService implements HelperGenerics<UserDTO, UserRegistrationDTO
   public UserDTO update(UserRegistrationDTO userRegistrationDTO, long id) {
     try {
       User users = usersRepository.findById(id).get();
-      users = modelMapper.map(userRegistrationDTO, users.getClass());
+      users.setId(id);
+      users.setFirstName(userRegistrationDTO.getFirstName());
+      users.setLastName(userRegistrationDTO.getLastName());
+      users.setEmail(userRegistrationDTO.getEmail());
+      users.setPassword(userRegistrationDTO.getPassword());
+      users.setAddress(userRegistrationDTO.getAddress());
+      users.setPhone(userRegistrationDTO.getPhone());
+      users.setCreateAt(userRegistrationDTO.getCreateAt());
       usersRepository.save(users);
       log.debug("This user's information has updated !!! ");
       return modelMapper.map(users, UserDTO.class);

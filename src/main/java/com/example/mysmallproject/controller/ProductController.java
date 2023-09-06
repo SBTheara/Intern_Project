@@ -3,6 +3,7 @@ package com.example.mysmallproject.controller;
 import com.example.mysmallproject.dto.ProductCreationDTO;
 import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.entity.Image;
+import com.example.mysmallproject.entity.Product_;
 import com.example.mysmallproject.service.ImageService;
 import com.example.mysmallproject.service.ProductService;
 import jakarta.validation.Valid;
@@ -73,7 +74,7 @@ public class ProductController {
             @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
             @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,
             @RequestParam(name = "search", required = false) String search,
-            @RequestParam(name = "sort-by", required = false, defaultValue = "name") String sortBy,
+            @RequestParam(name = "sort-by", required = false, defaultValue = Product_.ID) String sortBy,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "page-size", required = false, defaultValue = "10") int pageSize) {
         return ResponseEntity.ok().body(productsService.filterAndSearch(minPrice, maxPrice, search, sortBy, offset, pageSize));

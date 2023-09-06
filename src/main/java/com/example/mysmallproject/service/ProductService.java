@@ -1,5 +1,4 @@
 package com.example.mysmallproject.service;
-
 import com.example.mysmallproject.dto.ProductCreationDTO;
 import com.example.mysmallproject.dto.ProductDTO;
 import com.example.mysmallproject.entity.Product;
@@ -21,7 +20,6 @@ public class ProductService implements HelperGenerics<ProductDTO, ProductCreatio
   private final ProductRepository productRepository;
   private final ProductDTOConverter productDTOConverter;
   private final ModelMapper modelMapper;
-
   @Override
   public ProductDTO save(ProductCreationDTO productCreationDTO) {
     try {
@@ -39,7 +37,12 @@ public class ProductService implements HelperGenerics<ProductDTO, ProductCreatio
   public ProductDTO update(ProductCreationDTO productCreationDTO, long id) {
     try {
       Product pro = productRepository.findById(id).get();
-      pro = this.modelMapper.map(productCreationDTO, pro.getClass());
+      pro.setName(productCreationDTO.getName());
+      pro.setDescription(productCreationDTO.getDescription());
+      pro.setQuantity(productCreationDTO.getQuantity());
+      pro.setPrice(productCreationDTO.getPrice());
+      pro.setCreateAt(productCreationDTO.getCreateAt());
+      pro.setImage(productCreationDTO.getImage());
       productRepository.save(pro);
       log.debug("This product who id is {} was updated.......", id);
       return modelMapper.map(pro, ProductDTO.class);
