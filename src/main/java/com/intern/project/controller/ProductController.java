@@ -1,5 +1,4 @@
 package com.intern.project.controller;
-
 import com.intern.project.dto.ProductCreationDTO;
 import com.intern.project.dto.ProductDTO;
 import com.intern.project.entity.Image;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
 @RestController
 @RequestMapping(value = "/products")
 @Validated
@@ -27,7 +25,6 @@ public class ProductController {
     private final ProductService productsService;
     private final ImageService imageService;
     private final ModelMapper modelMapper;
-
     @PostMapping(value = "/add-new-product")
     public ResponseEntity<ProductDTO> saveProduct(
             @Valid @RequestBody ProductCreationDTO productCreationDTO) {
@@ -36,32 +33,27 @@ public class ProductController {
     @PutMapping(value = "/update-by-id/{id}")
     public ResponseEntity<ProductDTO> updateProduct(
             @Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id) {
-
         return new ResponseEntity<>(
                 modelMapper.map(productsService.update(productCreationDTO, id), ProductDTO.class),
                 HttpStatus.OK);
     }
-
     @DeleteMapping(value = "/delete-by-id/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id) {
         productsService.delete(id);
         return new ResponseEntity<>("Delete successful", HttpStatus.OK);
     }
-
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestParam(name = "image") MultipartFile file)
             throws IOException {
         Image image = imageService.uploadImage(file);
         return ResponseEntity.status(HttpStatus.OK).body(image.getName());
     }
-
     @GetMapping("/image/get/{filename}")
     public ResponseEntity<?> downloadImage(@PathVariable(name = "filename") String fileName)
             throws IOException {
         byte[] img = imageService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(img);
     }
-
     @DeleteMapping("/image/delete/{filename}")
     public void deleteFile(@PathVariable("filename") String fileName) throws IOException {
         imageService.deleteFile(fileName);

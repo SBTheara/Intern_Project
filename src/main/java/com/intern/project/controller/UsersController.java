@@ -21,21 +21,18 @@ public class UsersController {
     @PostMapping(value = "/add-new-users")
     public ResponseEntity<UserDTO> saveUser(
             @Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
-        return new ResponseEntity<>(usersService.save(userRegistrationDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(usersService.save(userRegistrationDTO),HttpStatus.CREATED);
     }
-
     @PutMapping(value = "/update-users/{id}")
     public ResponseEntity<UserDTO> updateUser(
             @Valid @RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id) {
-        return new ResponseEntity<>(usersService.update(userRegistrationDTO, id), HttpStatus.OK);
+        return new ResponseEntity<>(usersService.update(userRegistrationDTO, id),HttpStatus.OK);
     }
-
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteUsers(@PathVariable(name = "id") int id) {
         usersService.delete(id);
-        return new ResponseEntity<>("Successfully deleted an user", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully deleted an user",HttpStatus.OK);
     }
-
     @GetMapping(value = "/filter-and-search")
     public ResponseEntity<Page<UserDTO>> filter(
             @RequestParam(name = "address", required = false) String address,
