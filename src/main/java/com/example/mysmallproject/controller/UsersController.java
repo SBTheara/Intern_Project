@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UsersController {
     private final UsersService usersService;
-
     @PostMapping(value = "/add-new-users")
     public ResponseEntity<UserDTO> saveUser(
             @Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
@@ -26,10 +25,9 @@ public class UsersController {
     }
 
     @PutMapping(value = "/update-users/{id}")
-    public ResponseEntity<String> updateUser(
-            @RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id) {
-        usersService.update(userRegistrationDTO, id);
-        return new ResponseEntity<>("Update successful", HttpStatus.OK);
+    public ResponseEntity<UserDTO> updateUser(
+            @Valid @RequestBody UserRegistrationDTO userRegistrationDTO, @PathVariable(name = "id") int id) {
+        return new ResponseEntity<>(usersService.update(userRegistrationDTO, id), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

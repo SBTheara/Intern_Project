@@ -1,4 +1,4 @@
-package com.example.mysmallproject.utils;
+package com.example.mysmallproject.component;
 
 import com.example.mysmallproject.dto.ProductCreationDTO;
 import com.example.mysmallproject.dto.ProductDTO;

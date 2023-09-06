@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.Optional;
 import java.util.UUID;
+
 @Service
 @Slf4j
 public class ImageService {
@@ -60,6 +61,7 @@ public class ImageService {
     // transfer file to directory
 
   }
+
   public void deleteFile(String filename) throws IOException {
     Path targetLocation = this.fileStorageLocation.toAbsolutePath();
     String currentDirectoryName = targetLocation + "\\" + filename;

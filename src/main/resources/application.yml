@@ -23,4 +23,4 @@ logging:
     path: ./log/application
   logback:
     rolling policy:
-      max-file-size: 1MB
+      max-file-size: 10MB
