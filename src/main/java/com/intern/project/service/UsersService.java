@@ -1,5 +1,6 @@
 package com.intern.project.service;
 
+import com.intern.project.component.DTOConverter;
 import com.intern.project.component.UserSpecification;
 import com.intern.project.dto.UserDTO;
 import com.intern.project.dto.UserRegistrationDTO;
@@ -21,14 +22,16 @@ import static org.springframework.data.jpa.domain.Specification.where;
 public class UsersService implements HelperGenerics<UserDTO, UserRegistrationDTO> {
   private final UsersRepository usersRepository;
   private final ModelMapper modelMapper;
-
+  private final DTOConverter<User,UserDTO> dtoConverter;
   @Override
   public UserDTO save(UserRegistrationDTO userRegistrationDTO) {
     try {
-      User userRequest = modelMapper.map(userRegistrationDTO, User.class);
+//      User userRequest = modelMapper.map(userRegistrationDTO, User.class);
+      User userRequest = dtoConverter.convertToClass(userRegistrationDTO,User.class);
       User user = usersRepository.save(userRequest);
       log.debug("The user has been added !!! ");
-      return modelMapper.map(user, UserDTO.class);
+//      return modelMapper.map(user, UserDTO.class);
+      return dtoConverter.convertToDTO(user,UserDTO.class);
     } catch (IllegalStateException exception) {
       log.error("Could not add this user !!! ");
       return null;
@@ -49,7 +52,8 @@ public class UsersService implements HelperGenerics<UserDTO, UserRegistrationDTO
       users.setCreateAt(userRegistrationDTO.getCreateAt());
       usersRepository.save(users);
       log.debug("This user's information has updated !!! ");
-      return modelMapper.map(users, UserDTO.class);
+//      return modelMapper.map(users, UserDTO.class);
+      return dtoConverter.convertToDTO(users,UserDTO.class);
     } catch (IllegalStateException exception) {
       log.error("This user's information not found !!! ");
       return null;

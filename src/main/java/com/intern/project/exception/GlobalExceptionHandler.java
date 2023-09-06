@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
   @ExceptionHandler(IllegalStateException.class)
   public ResponseEntity<?> handlerException(IllegalStateException exception) {
-    return ResponseEntity.badRequest().build();
+    return ResponseEntity.badRequest().body(new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(),exception.getCause()));
   }
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<?> handlerConstraintValidationException(
@@ -24,15 +24,14 @@ public class GlobalExceptionHandler {
     for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
       errors.put(violation.getPropertyPath().toString(),violation.getMessage());
     }
-    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,exception.getLocalizedMessage(),errors);
     return ResponseEntity.badRequest()
-        .body(apiError);
+        .body(new ApiError(HttpStatus.BAD_REQUEST,exception.getLocalizedMessage(),errors));
   }
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<ApiError> productNotFoundException (NoSuchElementException noSuchElementException){
     ApiError error = new ApiError(
             HttpStatus.NOT_FOUND,
-            noSuchElementException.getMessage(),
+            noSuchElementException.getLocalizedMessage(),
             noSuchElementException.getCause()
     );
     return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

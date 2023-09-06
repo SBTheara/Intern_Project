@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class ProductSpecification extends SpecificationUtil {
   public static Specification<Product> filterMaxAndMin(
       double minPrice, double maxPrice, String search) {
@@ -36,6 +35,5 @@ public class ProductSpecification extends SpecificationUtil {
               searchID(root, query, criteriaBuilder, Product_.ID, search));
     }
     return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
-
   }
 }

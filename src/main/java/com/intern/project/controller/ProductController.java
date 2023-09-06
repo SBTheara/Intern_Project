@@ -66,7 +66,6 @@ public class ProductController {
     public void deleteFile(@PathVariable("filename") String fileName) throws IOException {
         imageService.deleteFile(fileName);
     }
-
     @GetMapping(value = "/filter-and-search")
     public ResponseEntity<Page<ProductDTO>> filter(
             @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
