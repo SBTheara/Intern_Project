@@ -18,15 +18,10 @@ public class ProductService implements HelperGenerics<ProductDTO, ProductCreatio
   private final DTOConverter<Product,ProductDTO> dtoConverter;
   @Override
   public ProductDTO save(ProductCreationDTO productCreationDTO) {
-    try {
       Product productRequest = dtoConverter.convertToClass(productCreationDTO,Product.class);
       Product product = productRepository.save(productRequest);
       log.debug("Product has been add successful !!!");
       return dtoConverter.convertToDTO(product, ProductDTO.class);
-    } catch (IllegalStateException exception) {
-      log.error("Failed to add new product");
-      return null;
-    }
   }
   @Override
   public ProductDTO update(ProductCreationDTO productCreationDTO, long id) {

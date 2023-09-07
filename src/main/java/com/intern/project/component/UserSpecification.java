@@ -6,8 +6,6 @@ import com.intern.project.utils.SpecificationUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-@Component
 public class UserSpecification extends SpecificationUtil {
   public static Specification<User> filterAndSearch(String address, String search) {
     if (StringUtils.isNotBlank(address) || StringUtils.isNotBlank(search)) {

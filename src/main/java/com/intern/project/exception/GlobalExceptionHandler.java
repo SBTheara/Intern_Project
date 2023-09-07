@@ -10,30 +10,37 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 @Data
 public class GlobalExceptionHandler {
   @ExceptionHandler(IllegalStateException.class)
   public ResponseEntity<?> handlerException(IllegalStateException exception) {
-    return ResponseEntity.badRequest().body(new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(),exception.getCause()));
+    return ResponseEntity.badRequest()
+        .body(
+            new ApiError(
+                HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), exception.getCause()));
   }
+
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<?> handlerConstraintValidationException(
       ConstraintViolationException exception) {
-    Map<String,String> errors = new HashMap<>();
+    Map<String, String> errors = new HashMap<>();
     for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
-      errors.put(violation.getPropertyPath().toString(),violation.getMessage());
+      errors.put(violation.getPropertyPath().toString(), violation.getMessage());
     }
     return ResponseEntity.badRequest()
-        .body(new ApiError(HttpStatus.BAD_REQUEST,exception.getLocalizedMessage(),errors));
+        .body(new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), errors));
   }
+
   @ExceptionHandler(NoSuchElementException.class)
-  public ResponseEntity<ApiError> productNotFoundException (NoSuchElementException noSuchElementException){
-    ApiError error = new ApiError(
+  public ResponseEntity<ApiError> productNotFoundException(
+      NoSuchElementException noSuchElementException) {
+    ApiError error =
+        new ApiError(
             HttpStatus.NOT_FOUND,
             noSuchElementException.getLocalizedMessage(),
-            noSuchElementException.getCause()
-    );
+            noSuchElementException.getCause());
     return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
   }
 }
