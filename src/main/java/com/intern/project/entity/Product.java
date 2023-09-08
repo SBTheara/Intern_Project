@@ -12,11 +12,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
-@Validated
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id",columnDefinition = "bigint(20)")
     private long id;
     @NotNull

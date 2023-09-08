@@ -1,8 +1,12 @@
 spring:
+  batch:
+    job:
+      enabled: false
   datasource:
-    url: jdbc:mysql://localhost:3344/pos
-    username: root
-    password: "***Theara2384056***"
+    driver-class-name: org.postgresql.Driver
+    password: "123"
+    url: jdbc:postgresql://localhost:5433/theara
+    username: postgres
   jpa:
     hibernate:
       ddl-auto: update
