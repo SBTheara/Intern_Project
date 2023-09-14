@@ -5,6 +5,8 @@ import com.intern.project.entity.Image;
 import com.intern.project.entity.Product_;
 import com.intern.project.service.ImageService;
 import com.intern.project.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -41,7 +43,7 @@ public class ProductController {
         productsService.delete(id);
         return new ResponseEntity<>("Delete successful", HttpStatus.OK);
     }
-    @PostMapping("/image/upload")
+    @PostMapping(value = "/image/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadImage(@RequestParam(name = "image") MultipartFile file)
             throws IOException {
         Image image = imageService.uploadImage(file);

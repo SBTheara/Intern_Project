@@ -1,11 +1,17 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+            issuer-uri: http://localhost:8080/realms/Test
+            jwt-set-uri: http://localhost:8080/realms/Test/protocol/openid-connect/certs
   batch:
     job:
       enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
     password: "123"
-    url: jdbc:postgresql://localhost:5433/theara
+    url: jdbc:postgresql://localhost:5432/pos
     username: postgres
   jpa:
     hibernate:
@@ -28,3 +34,15 @@ logging:
   logback:
     rolling policy:
       max-file-size: 10MB
+jwt:
+  auth:
+    converter:
+      principle-attribute: preferred_username
+      resource-id: theara-test-api
+servers:
+  - url: https://localhost:8888/*
+components:
+  securitySchemes:
+    openId:   # <--- Arbitrary name for the security scheme. Used to refer to it from elsewhere.
+      type: openIdConnect
+      openIdConnectUrl: http://localhost:8080/realms/Test/.well-known/openid-configuration
