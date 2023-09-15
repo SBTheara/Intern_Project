@@ -1,12 +1,10 @@
-package com.intern.project.component;
+package com.intern.project.utils;
 
 import com.intern.project.entity.Product;
 import com.intern.project.entity.Product_;
 import com.intern.project.utils.SpecificationUtil;
 import io.micrometer.common.util.StringUtils;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 public class ProductSpecification extends SpecificationUtil {
   public static Specification<Product> filterMaxAndMin(
       double minPrice, double maxPrice, String search) {

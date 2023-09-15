@@ -14,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,6 +61,7 @@ public class ProductController {
         imageService.deleteFile(fileName);
     }
     @GetMapping(value = "/filter-and-search")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ProductDTO>> filter(
             @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
             @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,

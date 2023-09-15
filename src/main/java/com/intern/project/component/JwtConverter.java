@@ -17,7 +17,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/*
+*   The component class use for convert jwt token and extract the role
+* */
 @Component
 public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter =
@@ -27,6 +29,11 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
     @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
 
+    /*
+    *   use jwtGrantedAuthoritiesConverter to convert the jwt token
+    *   after that extract the role method
+    *   and return the jwtAuthenticationToken
+    * */
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
         Collection<GrantedAuthority> authorities =
@@ -39,7 +46,9 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
                 getPrincipleClaimName(jwt)
         );
     }
-
+    /*
+    *   get the principleClaimName for identify the role key
+    * */
     private String getPrincipleClaimName(Jwt jwt) {
         String claimName = JwtClaimNames.SUB;
         if(principleAttribute != null){
@@ -47,7 +56,11 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
         }
         return jwt.getClaim(claimName);
     }
-
+    /*
+    *   return type collection of anything that extends from GrandAuthority
+    *   the process check the conditiion of claim and resourceId and get the resourceRole
+    *   return the resourceRole tha map with new SimpleGrantedAuthority and concat with ROLE_
+    * */
     private Collection<? extends GrantedAuthority> extractResourceRole(Jwt jwt) {
         Map<String, Object> resourceAccess;
         Map<String, Object> resource;

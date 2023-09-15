@@ -39,25 +39,11 @@ jwt:
     converter:
       principle-attribute: preferred_username
       resource-id: theara-test-api
-paths:
-  /api/v1/products:
-    get:
-      security:
-          - my_oAuth_security_schema:
-            - read_access
-securitySchemes:
-  my_oAuth_security_schema:
-    type: oauth2
-    flows:
-      implicit:
-        authorizationUrl: http://localhost:8080/realms/Test/.well-known/openid-configuration
-        scopes:
-          read_access: read data
-          write_access: modify data
 keycloak:
-  auth-server-url: http://localhost:8080/realms/Test/protocol/openid-connect/auth
-  realm: Test
-#springdoc:
-#  swagger-ui:
-#    oauth:
-#      client-id: login-app
+#  auth-server-url: http://localhost:8080/realms/Test/protocol/openid-connect/auth
+  tokenUrl: http://localhost:8080/realms/Test/protocol/openid-connect/token
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: theara-test-api
+      client-secret: ghxpWKDaElF7bQa9WThInV7Qkq1FRiNi

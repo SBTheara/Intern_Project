@@ -15,13 +15,12 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 @Configuration
 public class OpenAPISecurityConfig {
 
-    @Value("${keycloak.auth-server-url}")
-    String authServerUrl;
-    @Value("${keycloak.realm}")
-    String realm;
+//    @Value("${keycloak.auth-server-url}")
+//    String authServerUrl;
+    @Value("${keycloak.tokenUrl}")
+    String tokenUrl;
 
     private static final String OAUTH_SCHEME_NAME = "my_oAuth_security_schema";
-
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI().components(new Components()
@@ -31,7 +30,6 @@ public class OpenAPISecurityConfig {
                         .description("A service providing todos.")
                         .version("1.0"));
     }
-
     private SecurityScheme createOAuthScheme() {
         OAuthFlows flows = createOAuthFlows();
         return new SecurityScheme().type(SecurityScheme.Type.OAUTH2)
@@ -40,12 +38,13 @@ public class OpenAPISecurityConfig {
 
     private OAuthFlows createOAuthFlows() {
         OAuthFlow flow = createAuthorizationCodeFlow();
-        return new OAuthFlows().implicit(flow);
+        return new OAuthFlows().password(flow);
     }
 
     private OAuthFlow createAuthorizationCodeFlow() {
         return new OAuthFlow()
-                .authorizationUrl(authServerUrl + "/realms/" + realm + "/protocol/openid-connect/auth")
+//                .authorizationUrl(authServerUrl)
+                .tokenUrl(tokenUrl)
                 .scopes(new Scopes().addString("read_access", "read data")
                         .addString("write_access", "modify data"));
     }

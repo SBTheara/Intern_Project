@@ -1,4 +1,4 @@
-package com.intern.project.component;
+package com.intern.project.utils;
 
 import com.intern.project.entity.User;
 import com.intern.project.entity.User_;

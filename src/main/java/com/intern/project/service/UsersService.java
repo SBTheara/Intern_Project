@@ -1,7 +1,7 @@
 package com.intern.project.service;
 
 import com.intern.project.component.DTOConverter;
-import com.intern.project.component.UserSpecification;
+import com.intern.project.utils.UserSpecification;
 import com.intern.project.dto.UserDTO;
 import com.intern.project.dto.UserRegistrationDTO;
 import com.intern.project.repository.UsersRepository;

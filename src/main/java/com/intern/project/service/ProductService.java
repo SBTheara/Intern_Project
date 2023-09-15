@@ -1,6 +1,6 @@
 package com.intern.project.service;
 import com.intern.project.component.DTOConverter;
-import com.intern.project.component.ProductSpecification;
+import com.intern.project.utils.ProductSpecification;
 import com.intern.project.dto.ProductCreationDTO;
 import com.intern.project.dto.ProductDTO;
 import com.intern.project.repository.ProductRepository;
