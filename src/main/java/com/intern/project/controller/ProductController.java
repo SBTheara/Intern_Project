@@ -5,8 +5,6 @@ import com.intern.project.entity.Image;
 import com.intern.project.entity.Product_;
 import com.intern.project.service.ImageService;
 import com.intern.project.service.ProductService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
