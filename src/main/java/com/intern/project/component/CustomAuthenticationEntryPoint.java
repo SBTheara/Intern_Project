@@ -8,8 +8,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
 
-import static com.nimbusds.common.contenttype.ContentType.APPLICATION_JSON;
-
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
   @Override
