@@ -2,7 +2,6 @@ package com.intern.project.utils;
 
 import com.intern.project.entity.Product;
 import com.intern.project.entity.Product_;
-import com.intern.project.utils.SpecificationUtil;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 public class ProductSpecification extends SpecificationUtil {

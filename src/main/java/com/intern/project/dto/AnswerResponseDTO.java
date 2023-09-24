@@ -1,27 +1,21 @@
-package com.intern.project.entity;
+package com.intern.project.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "answer")
-public class Answer extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AnswerResponseDTO {
     private long id;
     private String type;
     private boolean isActive;
     private boolean isCorrect;
     private String level;
     private String content;
-    @Column(name = "question_id")
     private int questionId;
-
 }
