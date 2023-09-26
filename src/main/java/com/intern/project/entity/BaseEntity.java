@@ -24,12 +24,4 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedAt;
-
-    @Column(name = "created_by")
-    @CreatedBy
-    private String createdBy;
-
-    @Column(name = "updated_by")
-    @LastModifiedBy
-    private String updatedBy;
 }

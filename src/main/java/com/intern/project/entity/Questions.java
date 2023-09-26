@@ -22,12 +22,6 @@ public class Questions extends BaseEntity{
     private String level;
     private int score;
     private String content;
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "question_id",
-            referencedColumnName = "id",
-            insertable = false,
-            updatable = false
-    )
+    @OneToMany(mappedBy = "questions",cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

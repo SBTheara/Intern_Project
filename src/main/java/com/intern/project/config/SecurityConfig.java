@@ -37,7 +37,7 @@ public class SecurityConfig{
                         "/swagger-ui/**")
                     .permitAll()
                     .anyRequest()
-                    .authenticated())
+                    .permitAll())
         .oauth2ResourceServer(
             outh ->
                 outh.authenticationEntryPoint(new CustomAuthenticationEntryPoint())

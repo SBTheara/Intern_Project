@@ -1,5 +1,6 @@
 package com.intern.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,8 @@ public class Answer extends BaseEntity{
     private boolean isCorrect;
     private String level;
     private String content;
-    @Column(name = "question_id")
-    private int questionId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Questions questions;
 
 }
