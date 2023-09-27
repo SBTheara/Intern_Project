@@ -12,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "question")
+@SequenceGenerator(name = "questions_sequence_generator",sequenceName = "questions_seq",allocationSize = 1)
 public class Questions extends BaseEntity{
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,generator = "questions_sequence_generator")
+    private Long id;
     private String type;
     private boolean isActive;
     private String level;

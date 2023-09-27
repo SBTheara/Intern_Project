@@ -12,11 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "answer")
+@SequenceGenerator(name = "answer_sequence_generator",sequenceName = "answer_seq",allocationSize = 1)
 public class Answer extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "answer_sequence_generator")
+    private Long id;
     private String type;
     private boolean isActive;
     private boolean isCorrect;
