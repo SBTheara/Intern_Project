@@ -22,7 +22,7 @@ public class Answer extends BaseEntity{
     private boolean isCorrect;
     private String level;
     private String content;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JsonIgnore
     private Questions questions;
 

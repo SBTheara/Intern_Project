@@ -26,29 +26,46 @@ public class QuestionService {
   private final ModelMapper modelMapper;
 
   public QuestionDTO save(QuestionDTO request) {
-    Questions questions = modelMapper.map(request, Questions.class);
-    questions.setType(request.getType());
-    questions.setLevel(request.getLevel());
-    questions.setScore(request.getScore());
-    questions.setContent(request.getContent());
-    questions.setActive(request.isActive());
-    List<Answer> answersList = new ArrayList<>();
-    List<AnswerDTO> list = request.getAnswers();
-    questionRepository.save(questions);
-    list.forEach(
-        answer -> {
-          Answer answers = new Answer();
-          answers.setType(answer.getType());
-          answers.setLevel(answer.getLevel());
-          answers.setContent(answer.getContent());
-          answers.setActive(answers.isActive());
-          answers.setCorrect(answer.isCorrect());
-          answers.setQuestions(questions);
-          answersList.add(answers);
-          answerRepository.save(answers);
-        });
-    questions.setAnswers(answersList);
-    return modelMapper.map(questionRepository.save(questions), QuestionDTO.class);
+    Questions questions = this.getQuestion(request);
+    this.updateQuestionOrAnswer(questions, request);
+
+    List<Answer> newAnswers = this.getNewAnswer(request);
+    questions.setAnswers(newAnswers);
+
+    this.questionRepository.save(questions);
+    return this.modelMapper.map(questions, QuestionDTO.class);
+  }
+
+  private List<Answer> getNewAnswer(QuestionDTO request) {
+    return request.getAnswers().stream()
+        .filter(answer -> answer.getId() <= 0)
+        .map(ans -> this.modelMapper.map(ans, Answer.class))
+        .toList();
+  }
+
+  private void updateQuestionOrAnswer(Questions questions, QuestionDTO request) {
+    request.getAnswers().stream()
+        .filter(answerDTO -> answerDTO.getId() > 0)
+        .forEach(
+            update -> {
+              Answer answer =
+                  questions.getAnswers().stream()
+                      .filter(answer1 -> answer1.getId() == update.getId())
+                      .findFirst()
+                      .orElseThrow(() -> new IllegalStateException("Anser not found !!!"));
+              modelMapper.map(update, answer);
+            });
+  }
+
+  private Questions getQuestion(QuestionDTO request) {
+    if (request.getId() <= 0) {
+      return this.modelMapper.map(request, Questions.class);
+    } else {
+      return this.questionRepository
+          .findById(request.getId())
+          .filter(questions -> questions.getId() > 0)
+          .orElseThrow(() -> new IllegalStateException("Not found for this question !! "));
+    }
   }
 
   private long getid(Questions save) {

@@ -13,6 +13,4 @@ public class AnswerDTO {
     private boolean isCorrect;
     private String level;
     private String content;
-    @JsonIgnore
-    private QuestionDTO questions;
 }

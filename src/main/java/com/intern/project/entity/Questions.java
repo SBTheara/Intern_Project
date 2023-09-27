@@ -22,6 +22,6 @@ public class Questions extends BaseEntity{
     private String level;
     private int score;
     private String content;
-    @OneToMany(mappedBy = "questions",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "questions",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Answer> answers;
 }
