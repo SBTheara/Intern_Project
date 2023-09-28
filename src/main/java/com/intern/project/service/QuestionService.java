@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,57 +20,69 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
     private final ModelMapper modelMapper;
 
     public QuestionDTO save(QuestionDTO request) {
         Questions questions = this.getQuestion(request);
-        this.updateQuestionOrAnswer(questions, request);
-        this.questionRepository.save(questions);
+        if(isValidAnswer(request)) {
+            this.updateQuestionOrAnswer(questions, request);
+        }else {
+            this.getNewAnswer(questions,request);
+        }
         return this.modelMapper.map(questions, QuestionDTO.class);
     }
 
-    private List<Answer> getNewAnswer(Questions questions, QuestionDTO request) {
-        return request.getAnswers().stream()
-                .filter(answer -> answer.getId() <= 0L)
-                .map(ans -> this.modelMapper.map(ans, Answer.class))
-                .toList();
+    private boolean isValidAnswer(QuestionDTO request) {
+        return request.getAnswers().stream().anyMatch(answerRequest -> answerRequest.getId() != null && answerRequest.getId() != 0L);
+    }
+
+    private void getNewAnswer(Questions questions, QuestionDTO request) {
+        List<Answer> listAnswer = request.getAnswers().stream()
+                .map(ans -> {
+                    Answer answer = new Answer();
+                    this.modelMapper.map(ans, answer);
+                    answer.setQuestions(questions);
+                    return answer;
+                }).toList();
+        questions.setAnswers(listAnswer);
+        this.modelMapper.map(request, questions);
+        questionRepository.save(questions);
     }
 
     private void updateQuestionOrAnswer(Questions questions, QuestionDTO request) {
-        if (request.getAnswers().stream().anyMatch(req -> req.getId() == 0L)) {
-            List<Answer> listans = new ArrayList<>(this.getNewAnswer(questions, request));
-            listans.forEach(answer -> answer.setQuestions(questions));
-            answerRepository.saveAll(listans);
-        }
-        request.getAnswers().stream()
-                .filter(answerDTO -> answerDTO.getId() > 0L)
-                .forEach(
-                        update -> {
-                            Answer answer =
-                                    questions.getAnswers().stream()
-                                            .filter(answer1 -> Objects.equals(answer1.getId(), update.getId()))
-                                            .findFirst()
-                                            .orElseThrow(() -> new IllegalStateException("Anser not found !!!"));
-                            modelMapper.map(update, answer);
-                            answer.setQuestions(questions);
-                            answerRepository.save(answer);
-                        });
+        List<Answer> listAnswer = request.getAnswers().stream()
+                .map(update -> {
+                    Answer answer = questions.getAnswers().stream()
+                            .filter(answer1 -> Objects.equals(answer1.getId(), update.getId()))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalStateException("Anser not found !!!"));
+                    modelMapper.map(update, answer);
+                    answer.setQuestions(questions);
+                    return answer;
+                }).toList();
+        questions.setAnswers(listAnswer);
+        this.modelMapper.map(request, questions);
+        questionRepository.save(questions);
     }
 
     private Questions getQuestion(QuestionDTO request) {
-        if (request.getId() <= 0L) {
-            return this.modelMapper.map(request, Questions.class);
+        if (request.getId() == null || request.getId() == 0L) {
+            Questions questions = new Questions();
+            List<Answer> newAnswer = request.getAnswers().stream().map(answerRequest -> {
+                Answer answer = new Answer();
+                modelMapper.map(answerRequest, answer);
+                answer.setQuestions(questions);
+                return answer;
+            }).toList();
+            this.modelMapper.map(request, questions);
+            questions.setAnswers(newAnswer);
+            return questionRepository.save(questions);
         } else {
             return this.questionRepository
                     .findById(request.getId())
-                    .filter(questions -> questions.getId() > 0L)
+                    .filter(questions -> questions.getId() > 0)
                     .orElseThrow(() -> new IllegalStateException("Not found for this question !! "));
         }
-    }
-
-    private long getid(Questions save) {
-        return save.getId();
     }
 
     public QuestionDTO listById(long id) {

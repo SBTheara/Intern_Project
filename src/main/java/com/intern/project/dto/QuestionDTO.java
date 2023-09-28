@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class QuestionDTO{
-    private Long id;
+    private Long id=0L;
     private String type;
     private boolean isActive;
     private String level;

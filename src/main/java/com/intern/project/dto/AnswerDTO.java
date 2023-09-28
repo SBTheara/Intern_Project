@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnswerDTO {
-    private Long id;
+    private Long id=0L;
     private String type;
     private boolean isActive;
     private boolean isCorrect;

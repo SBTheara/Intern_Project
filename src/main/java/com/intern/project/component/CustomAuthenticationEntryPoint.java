@@ -20,4 +20,5 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("You don't have permission to access this ");
   }
+
 }
