@@ -21,6 +21,7 @@ import java.io.IOException;
 @RequestMapping(value = "/products")
 @Validated
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ProductController {
     private final ProductService productsService;
     private final ImageService imageService;

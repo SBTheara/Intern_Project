@@ -25,27 +25,40 @@ public class QuestionService {
     private final ModelMapper modelMapper;
 
     public QuestionDTO save(QuestionDTO request) {
-        Questions questions = this.getQuestion(request);
-        this.updateQuestionOrAnswer(questions, request);
-        this.questionRepository.save(questions);
+        Questions questions = new Questions();
+        if(validQuestion(request)){
+            questions.setAnswers(null);
+            questions = createNewQuestion(questions,request);
+            questionRepository.save(questions);
+        }
         return this.modelMapper.map(questions, QuestionDTO.class);
+    }
+
+    private Questions createNewQuestion(Questions questions, QuestionDTO request) {
+        questions.setAnswers(null);
+        modelMapper.map(request,questions);
+        return questionRepository.save(questions);
+    }
+
+    private boolean validQuestion(QuestionDTO request) {
+        return request.getId()==null;
     }
 
     private List<Answer> getNewAnswer(Questions questions, QuestionDTO request) {
         return request.getAnswers().stream()
-                .filter(answer -> answer.getId() <= 0L)
+                .filter(answer -> answer.getId() !=null)
                 .map(ans -> this.modelMapper.map(ans, Answer.class))
                 .toList();
     }
 
     private void updateQuestionOrAnswer(Questions questions, QuestionDTO request) {
-        if (request.getAnswers().stream().anyMatch(req -> req.getId() == 0L)) {
+        if (request.getAnswers().stream().anyMatch(req -> req.getId() ==null)) {
             List<Answer> listans = new ArrayList<>(this.getNewAnswer(questions, request));
             listans.forEach(answer -> answer.setQuestions(questions));
             answerRepository.saveAll(listans);
         }
         request.getAnswers().stream()
-                .filter(answerDTO -> answerDTO.getId() > 0L)
+                .filter(answerDTO ->!Objects.isNull(answerDTO.getId()))
                 .forEach(
                         update -> {
                             Answer answer =
@@ -60,14 +73,17 @@ public class QuestionService {
     }
 
     private Questions getQuestion(QuestionDTO request) {
-        if (request.getId() <= 0L) {
-            return this.modelMapper.map(request, Questions.class);
-        } else {
+        Questions questions = new Questions();
+        if(request.getId()!=null&&request.getId()>0L) {
             return this.questionRepository
                     .findById(request.getId())
-                    .filter(questions -> questions.getId() > 0L)
+                    .filter(question -> question.getId()!=null&&question.getId() > 0L)
                     .orElseThrow(() -> new IllegalStateException("Not found for this question !! "));
         }
+        questions.setId(request.getId());
+        questions.setAnswers(null);
+        modelMapper.map(request,questions);
+        return questionRepository.save(questions);
     }
 
     private long getid(Questions save) {
