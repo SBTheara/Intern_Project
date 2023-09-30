@@ -13,7 +13,6 @@ public class ProductDTO {
     private String description;
     private int quantity;
     private double price;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
     private String image;
 }

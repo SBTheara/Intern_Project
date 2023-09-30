@@ -25,7 +25,6 @@ public class Product {
     private int quantity;
     private double price;
     @NotNull
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
     @NotNull
     @NotBlank
