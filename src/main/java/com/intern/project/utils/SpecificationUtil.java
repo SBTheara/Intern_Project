@@ -1,11 +1,13 @@
 package com.intern.project.utils;
 
+import com.intern.project.entity.Questions_;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.data.jpa.domain.Specification;
 
-public class SpecificationUtil {
+public class SpecificationUtil<T> {
   public static Predicate searchID(
       Root<?> root,
       CriteriaQuery<?> query,

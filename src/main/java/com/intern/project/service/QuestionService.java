@@ -91,7 +91,7 @@ public class QuestionService {
                 .toList();
     }
 
-    public Page<QuestionDTO> filter(PaginateRequest request, String sortBy,String type ,String level) {
+    public Page<QuestionDTO> filter(PaginateRequest request, String sortBy,String type ,String level,String score) {
         PaginationRequestUtil.validateRequest(request, SORTABLE_FIELD);
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), Sort.by(Sort.Direction.fromString(request.getDirection()),sortBy));
         try {
@@ -99,6 +99,7 @@ public class QuestionService {
                     questionRepository.findAll(
                             QuestionSpecification.filterType(type)
                                     .and(QuestionSpecification.filterLevel(level))
+                                    .and(QuestionSpecification.filterScore(score))
                                     ,pageable).stream()
                             .map(questions -> this.modelMapper.map(questions, QuestionDTO.class))
                             .toList();

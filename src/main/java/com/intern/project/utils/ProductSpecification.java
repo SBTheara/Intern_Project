@@ -4,7 +4,7 @@ import com.intern.project.entity.Product;
 import com.intern.project.entity.Product_;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
-public class ProductSpecification extends SpecificationUtil {
+public class ProductSpecification extends SpecificationUtil<Product> {
   public static Specification<Product> filterMaxAndMin(
       double minPrice, double maxPrice, String search) {
     if (minPrice !=0 && maxPrice!=0 && StringUtils.isNotBlank(search)) {
