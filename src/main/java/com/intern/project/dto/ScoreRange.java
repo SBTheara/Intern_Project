@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScoreRange {
-    private String scoreRange;
     private int minScore;
     private int maxScore;
 }

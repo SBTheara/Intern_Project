@@ -8,7 +8,7 @@ import java.util.List;
 
 @NoArgsConstructor
 public class PaginationRequestUtil {
-    public static void validateRequest (PaginateRequest request, List<String> ALLOWED_FIELDS){
+    public static void validateRequest (PaginateRequest request, List<String> ALLOWED_FIELDS, List<String> range, String scoreRange){
         if(request.getPage()<0){
             throw new PaginateRequestException("Invalid page number");
         }
@@ -17,6 +17,9 @@ public class PaginationRequestUtil {
         }
         if(!ALLOWED_FIELDS.contains(request.getSortBy())){
             throw new PaginateRequestException("Invalid sort field");
+        }
+        if(!range.contains(scoreRange)){
+            throw new PaginateRequestException("Invalid score range input");
         }
         if(!List.of("asc","desc").contains(request.getDirection().toLowerCase())){
             throw new PaginateRequestException("Invalid sort direction");
