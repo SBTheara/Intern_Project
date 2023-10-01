@@ -11,10 +11,7 @@ import com.intern.project.utils.QuestionSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -94,16 +91,19 @@ public class QuestionService {
                 .toList();
     }
 
-    public Page<QuestionDTO> filter(PaginateRequest request, String type) {
+    public Page<QuestionDTO> filter(PaginateRequest request, String sortBy,String type ,String level) {
         PaginationRequestUtil.validateRequest(request, SORTABLE_FIELD);
-        Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), Sort.by(Sort.Direction.fromString(request.getDirection()),sortBy));
         try {
-            List<QuestionDTO> questionRespons =
-                    questionRepository.findAll(pageable).stream()
+            List<QuestionDTO> questionResponse =
+                    questionRepository.findAll(
+                            QuestionSpecification.filterType(type)
+                                    .and(QuestionSpecification.filterLevel(level))
+                                    ,pageable).stream()
                             .map(questions -> this.modelMapper.map(questions, QuestionDTO.class))
                             .toList();
             log.debug("Product found !!!!");
-            return new PageImpl<>(questionRespons);
+            return new PageImpl<>(questionResponse);
         } catch (IllegalStateException exception) {
             log.error("Product not found !!!!");
             return null;

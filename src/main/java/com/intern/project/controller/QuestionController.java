@@ -5,6 +5,7 @@ import com.intern.project.dto.QuestionDTO;
 import com.intern.project.exception.PaginateResponse;
 import com.intern.project.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,10 @@ public class QuestionController {
 
     @GetMapping(value = "/filter")
     public ResponseEntity<PaginateResponse<QuestionDTO>> filter(
-            @RequestParam(name = "sort-by", required = false, defaultValue = "type") String sortBy,
+            @RequestParam(name = "sort-by", required = false, defaultValue = "id") String sortBy,
             @RequestParam(name = "direction", required = false, defaultValue = "asc") String direction,
-            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "type", required = false,defaultValue = StringUtils.EMPTY) String type,
+            @RequestParam(name = "level", required = false,defaultValue = StringUtils.EMPTY) String level,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "page-size", required = false, defaultValue = "10") int pageSize) {
         PaginateRequest paginateRequest = PaginateRequest.builder()
@@ -48,7 +50,7 @@ public class QuestionController {
                 .sortBy(sortBy)
                 .direction(direction)
                 .build();
-        Page<QuestionDTO> questions = questionService.filter(paginateRequest, type);
+        Page<QuestionDTO> questions = questionService.filter(paginateRequest, sortBy,type,level);
         return new ResponseEntity<>(new PaginateResponse<QuestionDTO>(
                 questions.getTotalElements(),
                 offset,
