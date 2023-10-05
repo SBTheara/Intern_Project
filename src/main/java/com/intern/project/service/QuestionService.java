@@ -1,6 +1,7 @@
 package com.intern.project.service;
 
 import com.intern.project.dto.AnswerDTO;
+import com.intern.project.dto.PageResponse;
 import com.intern.project.dto.PaginateRequest;
 import com.intern.project.dto.QuestionDTO;
 import com.intern.project.entity.Answer;
@@ -8,15 +9,14 @@ import com.intern.project.entity.Questions;
 import com.intern.project.repository.QuestionRepository;
 import com.intern.project.utils.PaginationRequestUtil;
 import com.intern.project.utils.QuestionSpecification;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Slf4j
@@ -28,22 +28,22 @@ public class QuestionService {
   private static final List<String> SORTABLE_FIELD = List.of("type", "level");
   private static final List<String> SCORE_RANGE = List.of("10-50", "50-100");
 
-  public QuestionDTO save(QuestionDTO request) {
+  public QuestionDTO save(QuestionDTO request, Long id) {
     Questions question = new Questions();
-    boolean isNewQuestion = Objects.requireNonNullElse(request.getId(), 0L) <= 0L;
+    boolean isNewQuestion = Objects.requireNonNullElse(id, 0L) <= 0L;
     if (isNewQuestion) {
       modelMapper.map(request, question);
     } else {
-      question = getQuestion(request);
+      question = getQuestion(id);
     }
     createOrUpdateAnswer(question, request);
     this.modelMapper.map(request, question);
     return this.modelMapper.map(questionRepository.save(question), QuestionDTO.class);
   }
 
-  private Questions getQuestion(QuestionDTO request) {
+  private Questions getQuestion(Long id) {
     return this.questionRepository
-        .findById(request.getId())
+        .findById(id)
         .orElseThrow(() -> new IllegalStateException("Not found for this question !! "));
   }
 
@@ -117,5 +117,20 @@ public class QuestionService {
       log.error("Product not found !!!!");
       return null;
     }
+  }
+
+  public Page<Answer> getAnswerByQuestionId(PaginateRequest pageRequest, Long id) {
+    Pageable pageable =
+        PageRequest.of(
+            pageRequest.getPage(),
+            pageRequest.getSize(),
+            Sort.Direction.fromString(pageRequest.getDirection()),
+            pageRequest.getSortBy());
+    Questions questions =
+        questionRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalStateException("question not found !!"));
+    List<Answer> answerList = questions.getAnswers();
+    return new PageImpl<>(answerList, pageable, answerList.size());
   }
 }
