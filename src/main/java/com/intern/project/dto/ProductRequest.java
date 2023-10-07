@@ -9,12 +9,11 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductCreationDTO {
+public class ProductRequest {
     private String name;
     private String description;
     private int quantity;
     private double price;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
     private String image;
 }

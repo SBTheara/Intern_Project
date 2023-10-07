@@ -1,7 +1,7 @@
 package com.intern.project.controller;
 
-import com.intern.project.dto.ProductCreationDTO;
-import com.intern.project.dto.ProductDTO;
+import com.intern.project.dto.ProductRequest;
+import com.intern.project.dto.ProductResponse;
 import com.intern.project.entity.Image;
 import com.intern.project.entity.Product_;
 import com.intern.project.service.ImageService;
@@ -29,16 +29,16 @@ public class ProductController {
   private final ModelMapper modelMapper;
 
   @PostMapping(value = "/add-new-product")
-  public ResponseEntity<ProductDTO> saveProduct(
-      @Valid @RequestBody ProductCreationDTO productCreationDTO) {
-    return new ResponseEntity<>(productsService.save(productCreationDTO), HttpStatus.CREATED);
+  public ResponseEntity<ProductResponse> saveProduct(
+      @Valid @RequestBody ProductRequest productRequest) {
+    return new ResponseEntity<>(productsService.save(productRequest), HttpStatus.CREATED);
   }
 
   @PutMapping(value = "/update-by-id/{id}")
-  public ResponseEntity<ProductDTO> updateProduct(
-      @Valid @RequestBody ProductCreationDTO productCreationDTO, @PathVariable("id") int id) {
+  public ResponseEntity<ProductResponse> updateProduct(
+          @Valid @RequestBody ProductRequest productRequest, @PathVariable("id") int id) {
     return new ResponseEntity<>(
-        modelMapper.map(productsService.update(productCreationDTO, id), ProductDTO.class),
+        modelMapper.map(productsService.update(productRequest, id), ProductResponse.class),
         HttpStatus.OK);
   }
 
@@ -68,7 +68,7 @@ public class ProductController {
   }
 
   @GetMapping(value = "/filter-and-search")
-  public ResponseEntity<Page<ProductDTO>> filter(
+  public ResponseEntity<Page<ProductResponse>> filter(
       @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
       @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,
       @RequestParam(name = "search", required = false) String search,

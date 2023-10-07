@@ -1,9 +1,9 @@
 package com.intern.project.entity;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
+
 import java.util.Date;
 
 @Entity
@@ -12,10 +12,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@SequenceGenerator(name = "product_seq",sequenceName = "product_seq",allocationSize = 1)
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id",columnDefinition = "bigint(20)")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "product_seq")
     private long id;
     @NotNull
     @NotBlank(message = "Please enter the name of the products")
@@ -29,5 +29,8 @@ public class Product {
     @NotNull
     @NotBlank
     private String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private OrderProduct orderProduct;
 
 }
