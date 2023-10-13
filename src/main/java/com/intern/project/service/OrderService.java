@@ -5,7 +5,9 @@ import com.intern.project.dto.OrderResponse;
 import com.intern.project.entity.OrderItem;
 import com.intern.project.entity.OrderProduct;
 import com.intern.project.entity.Product;
+import com.intern.project.exception.OrderNotFoundException;
 import com.intern.project.repository.OrderRepository;
+import com.intern.project.exception.ProductNotFoundException;
 import com.intern.project.repository.ProductRepository;
 import com.intern.project.utils.PageRequest;
 import java.util.List;
@@ -51,7 +53,7 @@ public class OrderService {
     Product product =
         productRepository
             .findById(productId)
-            .orElseThrow(() -> new IllegalStateException("Not found product"));
+            .orElseThrow(() -> new ProductNotFoundException(productId));
     OrderItem orderItem = new OrderItem();
     orderItem.setProduct(product);
     orderItem.setOrderProduct(orderProduct);
@@ -72,7 +74,7 @@ public class OrderService {
     OrderProduct orderProduct =
         orderRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalStateException("Not found for order"));
+            .orElseThrow(() -> new OrderNotFoundException(id));
     return prepareOrderProductResponse(orderProduct, this.getListProductId(orderProduct));
   }
 

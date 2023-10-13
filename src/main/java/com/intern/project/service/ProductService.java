@@ -1,64 +1,79 @@
 package com.intern.project.service;
-import com.intern.project.component.DTOConverter;
-import com.intern.project.utils.ProductSpecification;
+
 import com.intern.project.dto.ProductRequest;
 import com.intern.project.dto.ProductResponse;
-import com.intern.project.repository.ProductRepository;
 import com.intern.project.entity.Product;
+import com.intern.project.exception.ProductBadRequesException;
+import com.intern.project.exception.ProductNotFoundException;
+import com.intern.project.repository.ProductRepository;
+import com.intern.project.utils.PageRequest;
+import com.intern.project.utils.ProductSpecification;
+import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProductService implements HelperGenerics<ProductResponse, ProductRequest> {
+public class ProductService {
   private final ProductRepository productRepository;
-  private final DTOConverter<Product, ProductResponse> dtoConverter;
-  @Override
-  public ProductResponse save(ProductRequest productCreationDTO) {
-      Product productRequest = dtoConverter.convertToClass(productCreationDTO,Product.class);
-      Product product = productRepository.save(productRequest);
-      log.debug("Product has been add successful !!!");
-      return dtoConverter.convertToDTO(product, ProductResponse.class);
+  private final ModelMapper modelMapper;
+
+  @Transactional(rollbackFor = Exception.class)
+  public ProductResponse createProduct(ProductRequest request) {
+    Product product = new Product();
+    this.modelMapper.map(request, product);
+    log.info("Product create successfully !!! ");
+    return this.modelMapper.map(productRepository.save(product), ProductResponse.class);
   }
-  @Override
-  public ProductResponse update(ProductRequest productRequest, long id) {
+
+  @Transactional(rollbackFor = Exception.class)
+  public ProductResponse updateProduct(ProductRequest request, Long id) {
     try {
-      Product pro = productRepository.findById(id).get();
-      pro.setName(productRequest.getName());
-      pro.setDescription(productRequest.getDescription());
-      pro.setQuantity(productRequest.getQuantity());
-      pro.setPrice(productRequest.getPrice());
-      pro.setCreateAt(productRequest.getCreateAt());
-      pro.setImage(productRequest.getImage());
-      productRepository.save(pro);
-      log.debug("This product who id is {} was updated.......", id);
-      return dtoConverter.convertToDTO(pro, ProductResponse.class);
-    } catch (IllegalStateException exception) {
+      Product product =
+          productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+      product.setId(id);
+      this.modelMapper.map(request, product);
+      log.info("Product update successfully !!! ");
+      return this.modelMapper.map(product, ProductResponse.class);
+    } catch (Exception exception) {
       log.error("Could not update this product");
-      return null;
+      throw new ProductBadRequesException("Could not update product");
     }
   }
+
   public Page<ProductResponse> filterAndSearch(
-      double minPrice, double maxPrice, String search, String sortBy, int offset, int pageSize) {
-    Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(Sort.Direction.ASC, sortBy));
-    try {
-      List<ProductResponse> pro =
-          productRepository
-              .findAll(ProductSpecification.filterMaxAndMin(minPrice, maxPrice, search), pageable)
-              .stream()
-              .map(p->dtoConverter.convertToDTO(p, ProductResponse.class))
-              .toList();
-      log.debug("Product found !!!!");
-      return new PageImpl<>(pro, Pageable.unpaged(), pro.size());
-    } catch (IllegalStateException exception) {
-      log.error("Product not found !!!!");
-      return null;
+      Double minPrice, Double maxPrice, String search, PageRequest request) {
+    Pageable pageable = request.toPageable();
+    Specification<Product> specification = Specification.where(null);
+    boolean isSearchExist = StringUtils.hasText(search);
+    if (isSearchExist) {
+      specification = specification.and(ProductSpecification.searchNameOrId(search));
     }
+    boolean isMinPriceExist = minPrice!=null;
+    if (isMinPriceExist) {
+      specification = specification.and(ProductSpecification.withFilterMinPrice(minPrice));
+    }
+    boolean isMaxPriceExist = minPrice!=null;
+    if (isMaxPriceExist) {
+      specification = specification.and(ProductSpecification.withFilterMaxPrice(maxPrice));
+    }
+    Page<Product> productsPage = productRepository.findAll(specification, pageable);
+    List<ProductResponse> productResponseList =
+        productsPage.getContent().stream()
+            .map(product -> this.modelMapper.map(product, ProductResponse.class))
+            .toList();
+    return new PageImpl<>(productResponseList, pageable, productsPage.getTotalElements());
   }
-  @Override
+
   public void delete(long id) {
     try {
       productRepository.deleteById(id);

@@ -1,11 +1,13 @@
 package com.intern.project.controller;
 
+import com.intern.project.dto.PageResponse;
 import com.intern.project.dto.ProductRequest;
 import com.intern.project.dto.ProductResponse;
 import com.intern.project.entity.Image;
-import com.intern.project.entity.Product_;
 import com.intern.project.service.ImageService;
 import com.intern.project.service.ProductService;
+import com.intern.project.utils.PageRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(value = "/products")
+@RequestMapping(value = "/v1/products")
 @Validated
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@Tag(name = "Product", description = "Product API")
 public class ProductController {
   private final ProductService productsService;
   private final ImageService imageService;
@@ -31,14 +33,14 @@ public class ProductController {
   @PostMapping(value = "/add-new-product")
   public ResponseEntity<ProductResponse> saveProduct(
       @Valid @RequestBody ProductRequest productRequest) {
-    return new ResponseEntity<>(productsService.save(productRequest), HttpStatus.CREATED);
+    return new ResponseEntity<>(productsService.createProduct(productRequest), HttpStatus.CREATED);
   }
 
   @PutMapping(value = "/update-by-id/{id}")
   public ResponseEntity<ProductResponse> updateProduct(
-          @Valid @RequestBody ProductRequest productRequest, @PathVariable("id") int id) {
+      @Valid @RequestBody ProductRequest productRequest, @PathVariable("id") Long id) {
     return new ResponseEntity<>(
-        modelMapper.map(productsService.update(productRequest, id), ProductResponse.class),
+        modelMapper.map(productsService.updateProduct(productRequest, id), ProductResponse.class),
         HttpStatus.OK);
   }
 
@@ -56,7 +58,7 @@ public class ProductController {
   }
 
   @GetMapping("/image/get/{filename}")
-  public ResponseEntity<?> downloadImage(@PathVariable(name = "filename") String fileName)
+  public ResponseEntity<byte[]> downloadImage(@PathVariable(name = "filename") String fileName)
       throws IOException {
     byte[] img = imageService.downloadImage(fileName);
     return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(img);
@@ -67,16 +69,30 @@ public class ProductController {
     imageService.deleteFile(fileName);
   }
 
-  @GetMapping(value = "/filter-and-search")
-  public ResponseEntity<Page<ProductResponse>> filter(
-      @RequestParam(name = "min-price", required = false, defaultValue = "0") double minPrice,
-      @RequestParam(name = "max-price", required = false, defaultValue = "0") double maxPrice,
-      @RequestParam(name = "search", required = false) String search,
-      @RequestParam(name = "sort-by", required = false, defaultValue = Product_.ID) String sortBy,
-      @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-      @RequestParam(name = "page-size", required = false, defaultValue = "10") int pageSize) {
-    return ResponseEntity.ok()
-        .body(
-            productsService.filterAndSearch(minPrice, maxPrice, search, sortBy, offset, pageSize));
+  @GetMapping(value = "/listProduct")
+  public ResponseEntity<PageResponse<ProductResponse>> filter(
+      @RequestParam(required = false, defaultValue = "desc") String direction,
+      @RequestParam(required = false, defaultValue = "id") String sortBy,
+      @RequestParam(required = false, defaultValue = "1") int offset,
+      @RequestParam(required = false, defaultValue = "10") int pageSize,
+      @RequestParam(required = false) Double minPrice,
+      @RequestParam(required = false) Double maxPrice,
+      @RequestParam(required = false) String search) {
+    PageRequest request =
+        PageRequest.builder()
+            .page(offset - 1)
+            .size(pageSize)
+            .direction(direction)
+            .sort(sortBy)
+            .build();
+    Page<ProductResponse> productResponsePage =
+        productsService.filterAndSearch(minPrice, maxPrice, search, request);
+    return new ResponseEntity<>(
+        new PageResponse<>(
+            productResponsePage.getNumber(),
+            productResponsePage.getSize(),
+            productResponsePage.getTotalElements(),
+            productResponsePage.getContent()),
+        HttpStatus.OK);
   }
 }
