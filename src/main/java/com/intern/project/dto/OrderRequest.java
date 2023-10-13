@@ -1,5 +1,6 @@
 package com.intern.project.dto;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -12,5 +13,5 @@ public class OrderRequest {
   private String orderDate;
   private String status;
   private String createAt;
-  private List<OrderItemRequest> products = new ArrayList<>();
+  private List<Long> productIds = new ArrayList<>();
 }

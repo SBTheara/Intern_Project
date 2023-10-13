@@ -1,6 +1,8 @@
 package com.intern.project.dto;
 
 import lombok.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 @AllArgsConstructor

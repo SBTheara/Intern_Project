@@ -1,6 +1,6 @@
 package com.intern.project.utils;
 
-import com.intern.project.entity.Questions_;
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

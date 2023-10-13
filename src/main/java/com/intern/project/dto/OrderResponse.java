@@ -8,10 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderResponse {
-  private long id;
+  private Long id;
   private String address;
   private String orderDate;
   private String status;
   private String createAt;
-  private List<ProductResponse> products = new ArrayList<>();
+  private int totalProducts;
+  private List<Long> productIds = new ArrayList<>();
 }
