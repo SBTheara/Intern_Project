@@ -3,6 +3,7 @@ package com.intern.project.controller;
 import com.intern.project.dto.OrderRequest;
 import com.intern.project.dto.OrderResponse;
 import com.intern.project.dto.PageResponse;
+import com.intern.project.dto.ProductIdsRequest;
 import com.intern.project.service.OrderService;
 import com.intern.project.utils.PageRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,11 @@ public class OrderController {
   @GetMapping("/{id}")
   public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id){
     return new ResponseEntity<>(orderService.getOrderById(id),HttpStatus.OK);
+  }
+
+  @DeleteMapping("/{id}/products")
+  public ResponseEntity<Void> deleteProductFromOrder(@PathVariable Long id, @RequestBody ProductIdsRequest productIdsRequest){
+    this.orderService.deleteProductsFromOrder(id,productIdsRequest);
+    return ResponseEntity.noContent().build();
   }
 }

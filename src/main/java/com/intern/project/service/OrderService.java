@@ -2,14 +2,18 @@ package com.intern.project.service;
 
 import com.intern.project.dto.OrderRequest;
 import com.intern.project.dto.OrderResponse;
+import com.intern.project.dto.ProductIdsRequest;
 import com.intern.project.entity.OrderItem;
 import com.intern.project.entity.OrderProduct;
 import com.intern.project.entity.Product;
 import com.intern.project.exception.OrderNotFoundException;
-import com.intern.project.repository.OrderRepository;
+import com.intern.project.exception.ProductBadRequesException;
 import com.intern.project.exception.ProductNotFoundException;
+import com.intern.project.repository.OrderItemRepository;
+import com.intern.project.repository.OrderRepository;
 import com.intern.project.repository.ProductRepository;
 import com.intern.project.utils.PageRequest;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,11 +21,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
   private final OrderRepository orderRepository;
+  private final OrderItemRepository orderItemRepository;
   private final ProductRepository productRepository;
   private final ModelMapper modelMapper;
 
@@ -72,15 +78,43 @@ public class OrderService {
 
   public OrderResponse getOrderById(Long id) {
     OrderProduct orderProduct =
-        orderRepository
-            .findById(id)
-            .orElseThrow(() -> new OrderNotFoundException(id));
+        orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     return prepareOrderProductResponse(orderProduct, this.getListProductId(orderProduct));
   }
 
   private List<Long> getListProductId(OrderProduct orderProduct) {
     return orderProduct.getOrderItems().stream()
         .map(orderItem -> orderItem.getProduct().getId())
+        .toList();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteProductsFromOrder(Long id, ProductIdsRequest productIdsRequest) {
+    OrderProduct orderProduct =
+        orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+    List<OrderItem> orderItemList = this.prepareForOrderItemIds(orderProduct, productIdsRequest);
+    List<Long> orderItemIdsList = orderItemList.stream().map(OrderItem::getId).toList();
+    this.validateProducts(productIdsRequest, orderProduct);
+    orderItemRepository.deleteAllByIdInBatch(orderItemIdsList);
+  }
+
+  private void validateProducts(ProductIdsRequest productIdsRequest, OrderProduct orderProduct) {
+    List<Long> productIdsReq = new ArrayList<>(productIdsRequest.getProductIds());
+    List<Long> productIdsList =
+        orderProduct.getOrderItems().stream()
+            .map(orderItem -> orderItem.getProduct().getId())
+            .toList();
+    productIdsReq.removeAll(productIdsList);
+    if (!productIdsReq.isEmpty()) {
+      throw new ProductBadRequesException("Not found for product has ids : " + productIdsReq);
+    }
+  }
+
+  private List<OrderItem> prepareForOrderItemIds(
+      OrderProduct orderProduct, ProductIdsRequest productIdsRequest) {
+    return orderProduct.getOrderItems().stream()
+        .filter(
+            orderItem -> productIdsRequest.getProductIds().contains(orderItem.getProduct().getId()))
         .toList();
   }
 }
