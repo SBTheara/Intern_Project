@@ -1,7 +1,5 @@
 package com.intern.project.service;
 
-
-import com.intern.project.component.DTOConverter;
 import com.intern.project.dto.UserDTO;
 import com.intern.project.dto.UserRegistrationDTO;
 import com.intern.project.entity.User;
@@ -23,13 +21,11 @@ import org.springframework.util.StringUtils;
 public class UsersService {
   private final UsersRepository usersRepository;
   private final ModelMapper modelMapper;
-  private final DTOConverter<User, UserDTO> dtoConverter;
 
   public UserDTO save(UserRegistrationDTO userRegistrationDTO) {
-    User userRequest = dtoConverter.convertToClass(userRegistrationDTO, User.class);
-    User user = usersRepository.save(userRequest);
+    User userRequest = this.modelMapper.map(userRegistrationDTO, User.class);
     log.debug("The user has been added !!! ");
-    return dtoConverter.convertToDTO(user, UserDTO.class);
+    return this.modelMapper.map(usersRepository.save(userRequest), UserDTO.class);
   }
 
   public UserDTO update(UserRegistrationDTO userRegistrationDTO, long id) {
@@ -37,7 +33,7 @@ public class UsersService {
     this.modelMapper.map(userRegistrationDTO, users);
     usersRepository.save(users);
     log.debug("This user's information has updated !!! ");
-    return dtoConverter.convertToDTO(users, UserDTO.class);
+    return this.modelMapper.map(users, UserDTO.class);
   }
 
   public void delete(long id) {

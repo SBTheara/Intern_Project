@@ -8,7 +8,6 @@ import com.intern.project.entity.OrderProduct;
 import com.intern.project.entity.Product;
 import com.intern.project.exception.OrderNotFoundException;
 import com.intern.project.exception.ProductBadRequesException;
-import com.intern.project.exception.ProductNotFoundException;
 import com.intern.project.repository.OrderItemRepository;
 import com.intern.project.repository.OrderRepository;
 import com.intern.project.repository.ProductRepository;
@@ -33,16 +32,17 @@ public class OrderService {
 
   public OrderResponse createOrder(OrderRequest request) {
     OrderProduct orderProduct = new OrderProduct();
-    List<OrderItem> orderItemList = getOrderItemList(request, orderProduct);
+    List<Product> productList = productRepository.findAllById(request.getProductIds());
+    List<OrderItem> orderItemList = getOrderItemList(productList, orderProduct);
     orderProduct.setOrderItems(orderItemList);
     this.modelMapper.map(request, orderProduct);
     return this.prepareOrderProductResponse(
         orderRepository.save(orderProduct), this.getListProductId(orderProduct));
   }
 
-  private List<OrderItem> getOrderItemList(OrderRequest request, OrderProduct orderProduct) {
-    return request.getProductIds().stream()
-        .map(productId -> this.prepareOrderItem(productId, orderProduct))
+  private List<OrderItem> getOrderItemList(List<Product> productList, OrderProduct orderProduct) {
+    return productList.stream()
+        .map(product -> this.prepareOrderItem(product, orderProduct))
         .toList();
   }
 
@@ -55,11 +55,7 @@ public class OrderService {
     return orderResponse;
   }
 
-  private OrderItem prepareOrderItem(Long productId, OrderProduct orderProduct) {
-    Product product =
-        productRepository
-            .findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException(productId));
+  private OrderItem prepareOrderItem(Product product, OrderProduct orderProduct) {
     OrderItem orderItem = new OrderItem();
     orderItem.setProduct(product);
     orderItem.setOrderProduct(orderProduct);
@@ -94,12 +90,12 @@ public class OrderService {
         orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     List<OrderItem> orderItemList = this.prepareForOrderItemIds(orderProduct, productIdsRequest);
     List<Long> orderItemIdsList = orderItemList.stream().map(OrderItem::getId).toList();
-    this.validateProducts(productIdsRequest, orderProduct);
+    this.validateProducts(productIdsRequest.getProductIds(), orderProduct);
     orderItemRepository.deleteAllByIdInBatch(orderItemIdsList);
   }
 
-  private void validateProducts(ProductIdsRequest productIdsRequest, OrderProduct orderProduct) {
-    List<Long> productIdsReq = new ArrayList<>(productIdsRequest.getProductIds());
+  private void validateProducts(List<Long> productIdsRequest, OrderProduct orderProduct) {
+    List<Long> productIdsReq = new ArrayList<>(productIdsRequest);
     List<Long> productIdsList =
         orderProduct.getOrderItems().stream()
             .map(orderItem -> orderItem.getProduct().getId())

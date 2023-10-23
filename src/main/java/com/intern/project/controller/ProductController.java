@@ -3,15 +3,21 @@ package com.intern.project.controller;
 import com.intern.project.dto.PageResponse;
 import com.intern.project.dto.ProductRequest;
 import com.intern.project.dto.ProductResponse;
+import com.intern.project.dto.ProductyFilterRequest;
 import com.intern.project.entity.Image;
 import com.intern.project.service.ImageService;
 import com.intern.project.service.ProductService;
 import com.intern.project.utils.PageRequest;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,13 +36,13 @@ public class ProductController {
   private final ImageService imageService;
   private final ModelMapper modelMapper;
 
-  @PostMapping(value = "/add-new-product")
+  @PostMapping
   public ResponseEntity<ProductResponse> saveProduct(
       @Valid @RequestBody ProductRequest productRequest) {
     return new ResponseEntity<>(productsService.createProduct(productRequest), HttpStatus.CREATED);
   }
 
-  @PutMapping(value = "/update-by-id/{id}")
+  @PutMapping
   public ResponseEntity<ProductResponse> updateProduct(
       @Valid @RequestBody ProductRequest productRequest, @PathVariable("id") Long id) {
     return new ResponseEntity<>(
@@ -44,7 +50,7 @@ public class ProductController {
         HttpStatus.OK);
   }
 
-  @DeleteMapping(value = "/delete-by-id/{id}")
+  @DeleteMapping
   public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") int id) {
     productsService.delete(id);
     return new ResponseEntity<>("Delete successful", HttpStatus.OK);
@@ -69,15 +75,13 @@ public class ProductController {
     imageService.deleteFile(fileName);
   }
 
-  @GetMapping(value = "/listProduct")
+  @GetMapping
   public ResponseEntity<PageResponse<ProductResponse>> filter(
       @RequestParam(required = false, defaultValue = "desc") String direction,
       @RequestParam(required = false, defaultValue = "id") String sortBy,
       @RequestParam(required = false, defaultValue = "1") int offset,
       @RequestParam(required = false, defaultValue = "10") int pageSize,
-      @RequestParam(required = false) Double minPrice,
-      @RequestParam(required = false) Double maxPrice,
-      @RequestParam(required = false) String search) {
+      ProductyFilterRequest requestFilter) {
     PageRequest request =
         PageRequest.builder()
             .page(offset - 1)
@@ -86,7 +90,11 @@ public class ProductController {
             .sort(sortBy)
             .build();
     Page<ProductResponse> productResponsePage =
-        productsService.filterAndSearch(minPrice, maxPrice, search, request);
+        productsService.listProducts(
+            requestFilter.getMinPrice(),
+            requestFilter.getMaxPrice(),
+            requestFilter.getSearch(),
+            request);
     return new ResponseEntity<>(
         new PageResponse<>(
             productResponsePage.getNumber(),

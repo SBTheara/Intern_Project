@@ -3,14 +3,13 @@ package com.intern.project.service;
 import com.intern.project.dto.ProductRequest;
 import com.intern.project.dto.ProductResponse;
 import com.intern.project.entity.Product;
+import com.intern.project.entity.Product_;
 import com.intern.project.exception.ProductBadRequesException;
 import com.intern.project.exception.ProductNotFoundException;
 import com.intern.project.repository.ProductRepository;
 import com.intern.project.utils.PageRequest;
 import com.intern.project.utils.ProductSpecification;
 import java.util.List;
-import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -50,7 +49,7 @@ public class ProductService {
     }
   }
 
-  public Page<ProductResponse> filterAndSearch(
+  public Page<ProductResponse> listProducts(
       Double minPrice, Double maxPrice, String search, PageRequest request) {
     Pageable pageable = request.toPageable();
     Specification<Product> specification = Specification.where(null);
@@ -58,14 +57,8 @@ public class ProductService {
     if (isSearchExist) {
       specification = specification.and(ProductSpecification.searchNameOrId(search));
     }
-    boolean isMinPriceExist = minPrice!=null;
-    if (isMinPriceExist) {
-      specification = specification.and(ProductSpecification.withFilterMinPrice(minPrice));
-    }
-    boolean isMaxPriceExist = minPrice!=null;
-    if (isMaxPriceExist) {
-      specification = specification.and(ProductSpecification.withFilterMaxPrice(maxPrice));
-    }
+    specification =
+        ProductSpecification.withFilterFieldHas(specification, Product_.PRICE, minPrice, maxPrice);
     Page<Product> productsPage = productRepository.findAll(specification, pageable);
     List<ProductResponse> productResponseList =
         productsPage.getContent().stream()
@@ -75,11 +68,9 @@ public class ProductService {
   }
 
   public void delete(long id) {
-    try {
-      productRepository.deleteById(id);
-      log.debug("This user was deleted......");
-    } catch (IllegalStateException exception) {
-      log.error("Something went wrong while deleting product");
-    }
+    Product product =
+        productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    log.debug("This user was deleted......");
+    productRepository.delete(product);
   }
 }
