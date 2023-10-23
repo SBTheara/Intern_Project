@@ -17,7 +17,6 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +52,7 @@ public class ProductService {
       Double minPrice, Double maxPrice, String search, PageRequest request) {
     Pageable pageable = request.toPageable();
     Specification<Product> specification = Specification.where(null);
-    boolean isSearchExist = StringUtils.hasText(search);
-    if (isSearchExist) {
-      specification = specification.and(ProductSpecification.searchNameOrId(search));
-    }
+    specification = ProductSpecification.search(specification, search);
     specification =
         ProductSpecification.withFilterFieldHas(specification, Product_.PRICE, minPrice, maxPrice);
     Page<Product> productsPage = productRepository.findAll(specification, pageable);

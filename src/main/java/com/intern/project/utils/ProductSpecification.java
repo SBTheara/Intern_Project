@@ -4,6 +4,7 @@ import com.intern.project.entity.Product;
 import com.intern.project.entity.Product_;
 import com.intern.project.exception.ProductBadRequesException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -14,7 +15,13 @@ public class ProductSpecification extends SpecificationUtil<Product> {
             searchName(root, query, criteriaBuilder, Product_.NAME, search),
             searchID(root, query, criteriaBuilder, Product_.ID, search));
   }
-
+  public static Specification<Product> search(Specification<Product> specification, String search){
+    boolean isSearchExist = StringUtils.hasText(search);
+    if (isSearchExist) {
+      specification = specification.and(ProductSpecification.searchNameOrId(search));
+    }
+    return specification;
+  }
   public static Specification<Product> withFilterMinPrice(String field, Double minPrice) {
     return (root, query, criteriaBuilder) -> criteriaBuilder.ge(root.get(field), minPrice);
   }
