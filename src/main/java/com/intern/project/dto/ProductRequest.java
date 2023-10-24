@@ -20,6 +20,7 @@ public class ProductRequest {
     private String description;
     private int quantity;
     private double price;
+    private boolean isActive;
     @NotNull
     @NotBlank
     private String image;

@@ -13,5 +13,6 @@ public class ProductResponse {
   private String description;
   private int quantity;
   private double price;
+  private boolean isActive;
   private String image;
 }

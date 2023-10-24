@@ -51,7 +51,8 @@ public class ProductService {
   public Page<ProductResponse> listProducts(
       Double minPrice, Double maxPrice, String search, PageRequest request) {
     Pageable pageable = request.toPageable();
-    Specification<Product> specification = Specification.where(null);
+    Specification<Product> specification =
+        Specification.where(null);
     specification = ProductSpecification.search(specification, search);
     specification =
         ProductSpecification.withFilterFieldHas(specification, Product_.PRICE, minPrice, maxPrice);

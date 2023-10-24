@@ -22,8 +22,8 @@ public class Product extends BaseEntity {
   private String description;
   private int quantity;
   private double price;
+  private boolean isActive;
   private String image;
-
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
   private List<OrderItem> orderItem = new ArrayList<>();
 

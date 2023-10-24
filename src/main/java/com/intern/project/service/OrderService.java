@@ -14,6 +14,8 @@ import com.intern.project.repository.ProductRepository;
 import com.intern.project.utils.PageRequest;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.intern.project.utils.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -32,12 +34,23 @@ public class OrderService {
 
   public OrderResponse createOrder(OrderRequest request) {
     OrderProduct orderProduct = new OrderProduct();
-    List<Product> productList = productRepository.findAllById(request.getProductIds());
+    List<Product> productList = productRepository.findAll(ProductSpecification.getActiveProducts());
+    List<Long> productIdsList = productList.stream().map(Product::getId).toList();
+    this.validateProductIds(request.getProductIds(),productIdsList);
     List<OrderItem> orderItemList = getOrderItemList(productList, orderProduct);
     orderProduct.setOrderItems(orderItemList);
     this.modelMapper.map(request, orderProduct);
     return this.prepareOrderProductResponse(
-        orderRepository.save(orderProduct), this.getListProductId(orderProduct));
+        orderRepository.save(orderProduct),productIdsList);
+  }
+
+  private void validateProductIds(List<Long> productIds, List<Long> productIdsList) {
+    List<Long> productListReq = new ArrayList<>(productIds);
+    List<Long> productList = new ArrayList<>(productIdsList);
+    productListReq.removeAll(productList);
+    if(!productListReq.isEmpty()){
+      throw new ProductBadRequesException("Not found for "+productListReq);
+    }
   }
 
   private List<OrderItem> getOrderItemList(List<Product> productList, OrderProduct orderProduct) {
@@ -75,12 +88,12 @@ public class OrderService {
   public OrderResponse getOrderById(Long id) {
     OrderProduct orderProduct =
         orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-    return prepareOrderProductResponse(orderProduct, this.getListProductId(orderProduct));
+    return prepareOrderProductResponse(orderProduct, this.getListProductId(id));
   }
 
-  private List<Long> getListProductId(OrderProduct orderProduct) {
-    return orderProduct.getOrderItems().stream()
-        .map(orderItem -> orderItem.getProduct().getId())
+  private List<Long> getListProductId(Long id) {
+    return productRepository.findAll(ProductSpecification.getActiveProduct(id)).stream()
+        .map(Product::getId)
         .toList();
   }
 
@@ -90,11 +103,11 @@ public class OrderService {
         orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     List<OrderItem> orderItemList = this.prepareForOrderItemIds(orderProduct, productIdsRequest);
     List<Long> orderItemIdsList = orderItemList.stream().map(OrderItem::getId).toList();
-    this.validateProducts(productIdsRequest.getProductIds(), orderProduct);
+    this.validateProductIds(productIdsRequest.getProductIds(), orderProduct);
     orderItemRepository.deleteAllByIdInBatch(orderItemIdsList);
   }
 
-  private void validateProducts(List<Long> productIdsRequest, OrderProduct orderProduct) {
+  private void validateProductIds(List<Long> productIdsRequest, OrderProduct orderProduct) {
     List<Long> productIdsReq = new ArrayList<>(productIdsRequest);
     List<Long> productIdsList =
         orderProduct.getOrderItems().stream()
