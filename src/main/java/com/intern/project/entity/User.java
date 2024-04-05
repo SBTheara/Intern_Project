@@ -21,6 +21,9 @@ public class User {
     @Column(name = "user_id",columnDefinition = "bigint(20)")
     private long id;
     @NotNull
+    @NotBlank(message = "please input your username")
+    private String username;
+    @NotNull
     @NotBlank(message = "please input your firstname")
     private String firstName;
     @NotNull
@@ -39,7 +42,7 @@ public class User {
     @NotNull
     @NotBlank(message = "Please input your phone number")
     private String phone;
-    @NotNull
-    @JsonFormat(pattern="dd/MM/yyyy")
-    private Date createAt;
+    private boolean isEnable;
+    private boolean isEmailVerified;
+    private String referenceId;
 }

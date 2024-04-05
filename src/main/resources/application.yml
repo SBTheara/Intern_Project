@@ -3,15 +3,22 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-            issuer-uri: http://localhost:8080/realms/Test
-            jwt-set-uri: http://localhost:8080/realms/Test/protocol/openid-connect/certs
+          jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+      client:
+        provider:
+          keycloak:
+            user-name-attribute: preferred_username
+            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
+            issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
+            jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
   batch:
     job:
       enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: "123"
-    url: jdbc:postgresql://localhost:5432/pos
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
   jpa:
     hibernate:
@@ -27,23 +34,22 @@ server:
   port: 8888
 logging:
   level:
-    com.example.mysmallproject: DEBUG
-    org.hibernate: ERROR
+    root: info
+    web: info
   file:
     path: ./log/application
   logback:
     rolling policy:
       max-file-size: 10MB
-jwt:
-  auth:
-    converter:
-      principle-attribute: preferred_username
-      resource-id: theara-test-api
 keycloak:
-#  auth-server-url: http://localhost:8080/realms/Test/protocol/openid-connect/auth
-  tokenUrl: http://localhost:8080/realms/Test/protocol/openid-connect/token
+  realm: Theara
+  client-id: theara
+  server-url: http://localhost:8080
+  client-secret: PhTOVdw78gU7z8pTlwHmwUfDxlkjKDqc
+  token-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/token
+  auth-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
 springdoc:
   swagger-ui:
     oauth:
-      client-id: theara-test-api
-      client-secret: ghxpWKDaElF7bQa9WThInV7Qkq1FRiNi
+      client-id: ${keycloak.client-id}
+      client-secret: ${keycloak.client-secret}

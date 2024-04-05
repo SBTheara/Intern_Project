@@ -18,13 +18,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
-    private final JwtTokenConverter jwtTokenConverter;
-    @Bean
-    SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+public class SecurityConfig {
+  @Bean
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtTokenConverter());
-    return http.csrf(AbstractHttpConfigurer::disable)
+    return http.cors(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .oauth2ResourceServer(
+            oauth ->
+                oauth
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .jwt(Customizer.withDefaults())
+                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(
@@ -34,19 +42,11 @@ public class SecurityConfig{
                         "/swagger-resources",
                         "/swagger-resources/**",
                         "/swagger-ui",
-                        "/swagger-ui/**")
+                        "/swagger-ui/**",
+                        "/v1/users/create")
                     .permitAll()
                     .anyRequest()
-                    .permitAll())
-        .oauth2ResourceServer(
-            outh ->
-                outh.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .jwt(Customizer.withDefaults())
-                    .jwt(jwt -> jwt
-                            .jwtAuthenticationConverter(jwtAuthenticationConverter)
-                    ))
-        .sessionManagement(
-            sessiion -> sessiion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .authenticated())
         .build();
-    }
+  }
 }
