@@ -7,11 +7,9 @@ import com.intern.project.entity.User;
 import com.intern.project.exception.UserNotFoundException;
 import com.intern.project.repository.UsersRepository;
 import com.intern.project.utils.UserSpecification;
-
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.modelmapper.ModelMapper;
@@ -29,7 +27,7 @@ public class UsersService {
   private final UsersRepository usersRepository;
   private final ModelMapper modelMapper;
   private final Keycloak keycloak;
-
+  private final String clientId;
   private final String realm;
 
   public UsersService(
@@ -40,32 +38,43 @@ public class UsersService {
     this.usersRepository = usersRepository;
     this.modelMapper = modelMapper;
     this.keycloak = keycloak;
+    this.clientId = keycloakConfigProperty.getClientId();
     this.realm = keycloakConfigProperty.getRealm();
   }
 
   public UserDTO save(UserRegistrationDTO userRegistrationDTO) {
+    var usersResource = keycloak.realm(realm).users();
 
     UserRepresentation userRepresentation = this.getUserRepresentation(userRegistrationDTO);
+    userRepresentation.setEmailVerified(false);
+    userRepresentation.setRequiredActions(List.of("VERIFY_EMAIL"));
     String userReferenceId;
 
-    var realmResource = keycloak.realm(realm);
 
-    try (var response = realmResource.users().create(userRepresentation)) {
+    try (var response = usersResource.create(userRepresentation)) {
       if (response.getStatus() != 201) {
         throw new IllegalArgumentException(response.getStatusInfo().getReasonPhrase());
       }
       String locationUri = (String) response.getMetadata().get("Location").get(0);
-      userReferenceId = locationUri.substring(locationUri.lastIndexOf("/")+1);
-      log.info(userReferenceId);
+      userReferenceId = locationUri.substring(locationUri.lastIndexOf("/") + 1);
     }
+    var userSendMail = usersResource.searchByUsername(userRegistrationDTO.getUsername(), true).stream()
+        .findFirst()
+            .orElse(null);
+
+    var userId = userSendMail.getId();
     User user = this.modelMapper.map(userRegistrationDTO, User.class);
     user.setPassword(new BCryptPasswordEncoder().encode(userRegistrationDTO.getPassword()));
     user.setReferenceId(userReferenceId);
     user.setEnable(false);
     log.debug("The user has been added !!! ");
-
+        this.sendVerificationLink(userId, usersResource);
     return this.modelMapper.map(usersRepository.save(user), UserDTO.class);
   }
+
+    private void sendVerificationLink(String userReferenceId, UsersResource usersResource) {
+      usersResource.get(userReferenceId).sendVerifyEmail();
+    }
 
   private UserRepresentation getUserRepresentation(UserRegistrationDTO userRegistrationDTO) {
     UserRepresentation userRepresentation = new UserRepresentation();
