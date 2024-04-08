@@ -5,12 +5,14 @@ import com.intern.project.component.JwtTokenConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -19,6 +21,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final ClientRegistrationRepository clientRegistrationRepository;
+  private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
+  private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
@@ -29,7 +36,6 @@ public class SecurityConfig {
             oauth ->
                 oauth
                     .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .jwt(Customizer.withDefaults())
                     .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -43,10 +49,25 @@ public class SecurityConfig {
                         "/swagger-resources/**",
                         "/swagger-ui",
                         "/swagger-ui/**",
-                        "/v1/users/create")
+                        "/v1/users/create",
+                        "/login/oauth2/code/google",
+                        "/v1/login")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
+        .oauth2Login(
+            oauth2Login ->
+                oauth2Login
+                    .clientRegistrationRepository(this.clientRegistrationRepository)
+                    .authorizedClientRepository(this.oAuth2AuthorizedClientRepository)
+                    .authorizedClientService(this.oAuth2AuthorizedClientService)
+                    .authorizationEndpoint(
+                        authorizationEndpointConfig ->
+                            authorizationEndpointConfig.baseUri("http://localhost:8888"))
+                    .redirectionEndpoint(
+                        redirectionEndpointConfig ->
+                            redirectionEndpointConfig.baseUri(
+                                "http://localhost:8888/login/oauth2/code/google")))
         .build();
   }
 }

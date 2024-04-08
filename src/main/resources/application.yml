@@ -7,11 +7,14 @@ spring:
       client:
         provider:
           keycloak:
-
             user-name-attribute: preferred_username
             authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
             issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
             jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+        registration:
+          google:
+#            client-id: input google client id
+#            client-secret: input google client secret
 
   batch:
     job:
