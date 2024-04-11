@@ -56,18 +56,22 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .oauth2Login(
-            oauth2Login ->
-                oauth2Login
-                    .clientRegistrationRepository(this.clientRegistrationRepository)
-                    .authorizedClientRepository(this.oAuth2AuthorizedClientRepository)
-                    .authorizedClientService(this.oAuth2AuthorizedClientService)
-                    .authorizationEndpoint(
-                        authorizationEndpointConfig ->
-                            authorizationEndpointConfig.baseUri("http://localhost:8888"))
-                    .redirectionEndpoint(
-                        redirectionEndpointConfig ->
-                            redirectionEndpointConfig.baseUri(
-                                "http://localhost:8888/login/oauth2/code/google")))
+            oauth2Config ->
+                oauth2Config
+                        .clientRegistrationRepository(clientRegistrationRepository)
+                        .authorizedClientRepository(oAuth2AuthorizedClientRepository)
+                        .authorizedClientService(oAuth2AuthorizedClientService)
+                        .redirectionEndpoint(
+                    redirectionEndpointConfig ->
+                        redirectionEndpointConfig.baseUri(
+                            "http://localhost:8080/login/oauth2/code/google")))
+        .logout(
+            logoutConfig ->
+                logoutConfig
+                    .clearAuthentication(true)
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .invalidateHttpSession(true)
+                    .logoutSuccessUrl("http://localhost:8080/realms/planning/protocol/openid-connect/logout"))
         .build();
   }
 }

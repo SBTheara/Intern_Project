@@ -45,13 +45,14 @@ public class OpenAPISecurityConfig {
 
   private OAuthFlows createOAuthFlows() {
     OAuthFlow flow = createAuthorizationCodeFlow();
-    return new OAuthFlows().implicit(flow);
+    return new OAuthFlows().authorizationCode(flow);
   }
 
   private OAuthFlow createAuthorizationCodeFlow() {
     return new OAuthFlow()
         .authorizationUrl(authServerUrl)
         .tokenUrl(tokenUrl)
+        .refreshUrl(tokenUrl)
         .scopes(
             new Scopes()
                 .addString("read_access", "read data")

@@ -12,9 +12,12 @@ spring:
             issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
             jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
         registration:
-          google:
-#            client-id: input google client id
-#            client-secret: input google client secret
+          keycloak:
+            client-id: ${keycloak.client-id}
+            client-secret: ${keycloak.client-secret}
+            client-name: ${keycloak.client-id}
+            redirect-uri: http://localhost:8888/*
+            authorization-grant-type: authorization_code
 
   batch:
     job:
@@ -46,10 +49,10 @@ logging:
     rolling policy:
       max-file-size: 10MB
 keycloak:
-  realm: Theara
+  realm: planning
   client-id: theara
   server-url: http://localhost:8080
-  client-secret: YjZp6uv5yLCixp1TFXEoZaFDdlNAs7cF
+  client-secret: oBiM0TtZTUpyOnBUKyvpF4K8FWyY8Iig
   token-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/token
   auth-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
 springdoc:
@@ -57,3 +60,5 @@ springdoc:
     oauth:
       client-id: ${keycloak.client-id}
       client-secret: ${keycloak.client-secret}
+      realm: ${keycloak.realm}
+
