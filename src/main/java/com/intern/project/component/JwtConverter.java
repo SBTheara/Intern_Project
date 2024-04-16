@@ -14,6 +14,7 @@
 //
 //import java.util.Collection;
 //import java.util.Map;
+//import java.util.Objects;
 //import java.util.Set;
 //import java.util.stream.Collectors;
 //import java.util.stream.Stream;
@@ -38,7 +39,7 @@
 //    public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
 //        Collection<GrantedAuthority> authorities =
 //                Stream.concat(  //concat to one string
-//                        jwtGrantedAuthoritiesConverter.convert(jwt).stream(), // convert
+//                        Objects.requireNonNull(jwtGrantedAuthoritiesConverter.convert(jwt)).stream(), // convert
 //                        extractResourceRole(jwt).stream()).collect(Collectors.toSet()); //extract role method
 //        return new JwtAuthenticationToken(
 //                jwt,
@@ -58,9 +59,10 @@
 //    }
 //    /*
 //    *   return type collection of anything that extends from GrandAuthority
-//    *   the process check the conditiion of claim and resourceId and get the resourceRole
+//    *   the process check the condition of claim and resourceId and get the resourceRole
 //    *   return the resourceRole tha map with new SimpleGrantedAuthority and concat with ROLE_
 //    * */
+//    @SuppressWarnings("unchecked")
 //    private Collection<? extends GrantedAuthority> extractResourceRole(Jwt jwt) {
 //        Map<String, Object> resourceAccess;
 //        Map<String, Object> resource;
