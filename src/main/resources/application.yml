@@ -12,12 +12,10 @@ spring:
             issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
             jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
         registration:
-
           google:
-            client-id: // google client id
-            client-secret: // google client secret
+            client-id: google-client-id
+            client-secret: //google client secret
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8888/swagger-ui/index.html
 
           keycloak:
             client-id: ${keycloak.client-id}

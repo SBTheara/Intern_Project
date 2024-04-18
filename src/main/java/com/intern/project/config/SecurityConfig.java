@@ -32,46 +32,30 @@ public class SecurityConfig {
     jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtTokenConverter());
     return http.cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
-        .oauth2ResourceServer(
-            oauth ->
-                oauth
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+//        .oauth2ResourceServer(
+//            oauth ->
+//                oauth
+//                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(
-                        "/users/add-new-users",
-                        "/v3/api-docs",
-                        "/v3/api-docs/**",
-                        "/swagger-resources",
-                        "/swagger-resources/**",
-                        "/swagger-ui",
-                        "/swagger-ui/**",
-                        "/v1/users/create",
-                        "/login/oauth2/code/google",
-                        "/v1/login")
-                    .permitAll()
+//                auth.requestMatchers(
+//                        "/users/add-new-users",
+//                        "/v3/api-docs",
+//                        "/v3/api-docs/**",
+//                        "/swagger-resources",
+//                        "/swagger-resources/**",
+//                        "/swagger-ui",
+//                        "/swagger-ui/**",
+//                        "/v1/users/create",
+//                        "/login/oauth2/code/google",
+//                        "/api/v1/*")
+//                    .permitAll()
+                    auth
                     .anyRequest()
-                    .authenticated())
-        .oauth2Login(
-            oauth2Config ->
-                oauth2Config
-                        .clientRegistrationRepository(clientRegistrationRepository)
-                        .authorizedClientRepository(oAuth2AuthorizedClientRepository)
-                        .authorizedClientService(oAuth2AuthorizedClientService)
-                        .redirectionEndpoint(
-                    redirectionEndpointConfig ->
-                        redirectionEndpointConfig.baseUri(
-                            "http://localhost:8080/login/oauth2/code/google")))
-        .logout(
-            logoutConfig ->
-                logoutConfig
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .invalidateHttpSession(true)
-                    .logoutSuccessUrl("http://localhost:8080/realms/planning/protocol/openid-connect/logout"))
+                    .permitAll())
         .build();
   }
 }
