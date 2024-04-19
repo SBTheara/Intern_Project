@@ -6,58 +6,63 @@ spring:
           jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
       client:
         provider:
-          keycloak:
-            user-name-attribute: preferred_username
-            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
-            issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
-            jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+          google:
+            jwk-set-uri: ${google.authentication.jwk-set-uri}
+            issuer-uri: ${google.authentication.issuer-uri}
+
+        #          keycloak:
+        #            user-name-attribute: preferred_username
+        #            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
+        #            issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
+        #            jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+
         registration:
           google:
-            client-id: google-client-id
-            client-secret: //google client secret
-            authorization-grant-type: authorization_code
+            client-id: ${google.authentication.client-id}
+            client-secret: ${google.authentication.client-secret}
+            authorization-grant-type: ${google.authentication.grant-type}
 
-          keycloak:
-            client-id: ${keycloak.client-id}
-            client-secret: ${keycloak.client-secret}
-            client-name: ${keycloak.client-id}
-            redirect-uri: http://localhost:8888/*
-            authorization-grant-type: authorization_code
+  #          keycloak:
+  #            client-id: ${keycloak.client-id}
+  #            client-secret: ${keycloak.client-secret}
+  #            client-name: ${keycloak.client-id}
+  #            redirect-uri: http://localhost:8888/*
+  #            authorization-grant-type: authorization_code
 
   batch:
     job:
       enabled: false
   datasource:
-    driver-class-name: org.postgresql.Driver
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.postgresql.Driver}
+    password: ${DB_PASSWORD:postgres}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DDL_AUTO:update}
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: ${MAX_FILE_SIZE:10MB}
+      max-request-size: ${MAX_REQUEST_SIZE:10MB}
 app:
   file:
-    upload-dir: ./uploads/files
+    upload-dir: ${FILE_UPLOAD_DIR:./uploads/files}
 server:
-  port: 8888
+  port: ${SERVER_PORT:8888}
 logging:
   level:
-    root: info
-    web: info
+    root: ${LOGGING_LEVEL_ROOT:info}
+    web: ${LOGGING_LEVEL_WEB:info}
   file:
-    path: ./log/application
+    path: ${LOGGING_FILE_PATH:./log/application}
   logback:
     rolling policy:
-      max-file-size: 10MB
+      max-file-size: ${LOGGING_FILE_SIZE:10MB}
 keycloak:
-  realm: planning
-  client-id: theara
-  server-url: http://localhost:8080
-  client-secret: oBiM0TtZTUpyOnBUKyvpF4K8FWyY8Iig
+  realm: ${KEYCLOAK_REALM:planning}
+  client-id: ${KEYCLOAK_CLIENT_ID:theara}
+  server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8080}
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:oBiM0TtZTUpyOnBUKyvpF4K8FWyY8Iig}
   token-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/token
   auth-url: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
 springdoc:
@@ -66,4 +71,13 @@ springdoc:
       client-id: ${keycloak.client-id}
       client-secret: ${keycloak.client-secret}
       realm: ${keycloak.realm}
+google:
+  authentication:
+    client-id: ${CLIENT_ID://google-client-id}
+    client-secret: ${CLIENT_SECRET://google-client-secret}
+    call-back-uri: ${CALL_BACK_URI:http://localhost:8888/v1/auth/callback}
+    grant-type: ${GRANT_TYPE:authorization_code}
+    jwk-set-uri: ${JWK_SET_URI:https://www.googleapis.com/oauth2/v3/certs}
+    issuer-uri: ${ISSUER_URI:https://accounts.google.com}
+
 
