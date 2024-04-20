@@ -65,7 +65,7 @@ public class UsersService {
     var userId = userSendMail.getId();
     User user = this.modelMapper.map(userRegistrationDTO, User.class);
     user.setPassword(new BCryptPasswordEncoder().encode(userRegistrationDTO.getPassword()));
-    user.setReferenceId(userReferenceId);
+    user.setUserSubjectId(userReferenceId);
     user.setEnable(false);
     log.debug("The user has been added !!! ");
         this.sendVerificationLink(userId, usersResource);

@@ -3,6 +3,7 @@ package com.intern.project.controller;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.intern.project.service.GoogleAuthenticationService;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class GoogleAuthenticationController {
 
   @GetMapping("/callback")
   public ResponseEntity<GoogleTokenResponse> callback(@RequestParam("code") String code)
-      throws IOException {
+      throws IOException, GeneralSecurityException {
     return new ResponseEntity<>(googleAuthenticationService.getToken(code), HttpStatus.OK);
   }
 

@@ -1,15 +1,7 @@
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
       client:
-        provider:
-          google:
-            jwk-set-uri: ${google.authentication.jwk-set-uri}
-            issuer-uri: ${google.authentication.issuer-uri}
-
         #          keycloak:
         #            user-name-attribute: preferred_username
         #            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
@@ -21,6 +13,10 @@ spring:
             client-id: ${google.authentication.client-id}
             client-secret: ${google.authentication.client-secret}
             authorization-grant-type: ${google.authentication.grant-type}
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${google.authentication.jwk-set-uri}
+          issuer-uri: ${google.authentication.issuer-uri}
 
   #          keycloak:
   #            client-id: ${keycloak.client-id}
