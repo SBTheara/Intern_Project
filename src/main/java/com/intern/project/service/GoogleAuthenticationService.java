@@ -69,12 +69,13 @@ public class GoogleAuthenticationService {
 
     GoogleIdToken.Payload payload = idToken.getPayload();
 
-    if (payload.getEmail().startsWith("theara")) {
-      googleTokenResponse.clear();
-      googleTokenResponse.set("Unauthorized", "Invalid email");
-      return googleTokenResponse;
-    }
-
+//    if (payload.getEmail().startsWith("theara")) {
+//      googleTokenResponse.clear();
+//      googleTokenResponse.set("Unauthorized", "Invalid email");
+//      return googleTokenResponse;
+//    }
+    var audient = payload.getAudienceAsList();
+    log.info(audient.toString());
     Optional<User> userOptional = this.usersRepository.findByEmail(payload.getEmail());
 
     if (userOptional.isEmpty()) {
