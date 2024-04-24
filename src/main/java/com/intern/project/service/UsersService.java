@@ -8,6 +8,8 @@ import com.intern.project.exception.UserNotFoundException;
 import com.intern.project.repository.UsersRepository;
 import com.intern.project.utils.UserSpecification;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -43,38 +45,39 @@ public class UsersService {
   }
 
   public UserDTO save(UserRegistrationDTO userRegistrationDTO) {
-    var usersResource = keycloak.realm(realm).users();
-
-    UserRepresentation userRepresentation = this.getUserRepresentation(userRegistrationDTO);
-    userRepresentation.setEmailVerified(false);
-    userRepresentation.setRequiredActions(List.of("VERIFY_EMAIL"));
-    String userReferenceId;
-
-
-    try (var response = usersResource.create(userRepresentation)) {
-      if (response.getStatus() != 201) {
-        throw new IllegalArgumentException(response.getStatusInfo().getReasonPhrase());
-      }
-      String locationUri = (String) response.getMetadata().get("Location").get(0);
-      userReferenceId = locationUri.substring(locationUri.lastIndexOf("/") + 1);
-    }
-    var userSendMail = usersResource.searchByUsername(userRegistrationDTO.getUsername(), true).stream()
-        .findFirst()
-            .orElse(null);
-
-    var userId = userSendMail.getId();
+    //    var usersResource = keycloak.realm(realm).users();
+    //
+    //    UserRepresentation userRepresentation = this.getUserRepresentation(userRegistrationDTO);
+    //    userRepresentation.setEmailVerified(false);
+    //    userRepresentation.setRequiredActions(List.of("VERIFY_EMAIL"));
+    //    String userReferenceId;
+    //
+    //
+    //    try (var response = usersResource.create(userRepresentation)) {
+    //      if (response.getStatus() != 201) {
+    //        throw new IllegalArgumentException(response.getStatusInfo().getReasonPhrase());
+    //      }
+    //      String locationUri = (String) response.getMetadata().get("Location").get(0);
+    //      userReferenceId = locationUri.substring(locationUri.lastIndexOf("/") + 1);
+    //    }
+    //    var userSendMail = usersResource.searchByUsername(userRegistrationDTO.getUsername(),
+    // true).stream()
+    //        .findFirst()
+    //            .orElse(null);
+    //
+    //    var userId = userSendMail.getId();
     User user = this.modelMapper.map(userRegistrationDTO, User.class);
     user.setPassword(new BCryptPasswordEncoder().encode(userRegistrationDTO.getPassword()));
-    user.setUserSubjectId(userReferenceId);
+    user.setUserSubjectId(UUID.randomUUID().toString());
     user.setEnable(false);
-    log.debug("The user has been added !!! ");
-        this.sendVerificationLink(userId, usersResource);
+    //    log.debug("The user has been added !!! ");
+    //        this.sendVerificationLink(userId, usersResource);
     return this.modelMapper.map(usersRepository.save(user), UserDTO.class);
   }
 
-    private void sendVerificationLink(String userReferenceId, UsersResource usersResource) {
-      usersResource.get(userReferenceId).sendVerifyEmail();
-    }
+  private void sendVerificationLink(String userReferenceId, UsersResource usersResource) {
+    usersResource.get(userReferenceId).sendVerifyEmail();
+  }
 
   private UserRepresentation getUserRepresentation(UserRegistrationDTO userRegistrationDTO) {
     UserRepresentation userRepresentation = new UserRepresentation();

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(value = "/v1/products")
+@RequestMapping(value = "/internal/v1/products")
 @Validated
 @RequiredArgsConstructor
 @Tag(name = "Product", description = "Product API")
