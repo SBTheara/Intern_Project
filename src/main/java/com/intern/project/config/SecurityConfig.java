@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +25,7 @@ public class SecurityConfig {
 
   private static final String[] STRICT_ENDPOINT = {"/internal/**"};
   private final UserDetailsService userDetailsService;
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
@@ -38,19 +40,29 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth -> auth.requestMatchers(STRICT_ENDPOINT).authenticated().anyRequest().permitAll())
+        .oauth2Login(
+            oauth2LoginConfig -> oauth2LoginConfig.successHandler(authenticationSuccessHandler()))
         .build();
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder)
-          throws Exception {
-    AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+  public AuthenticationManager authenticationManager(
+      HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
+    AuthenticationManagerBuilder authenticationManagerBuilder =
+        http.getSharedObject(AuthenticationManagerBuilder.class);
+    authenticationManagerBuilder
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(bCryptPasswordEncoder);
     return authenticationManagerBuilder.build();
   }
 
   @Bean
-  public BCryptPasswordEncoder bCryptPasswordEncoder(){
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    return (request, response, authentication) -> response.sendRedirect("/swagger-ui/index.html");
   }
 }

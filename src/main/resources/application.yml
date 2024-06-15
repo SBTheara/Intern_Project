@@ -1,30 +1,33 @@
 spring:
+  liquibase:
+    change-log: db/changelog/changelog.sql
   security:
     oauth2:
       client:
-        #          keycloak:
-        #            user-name-attribute: preferred_username
-        #            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
-        #            issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
-        #            jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
-
         registration:
+          keycloak:
+            client-id: ${keycloak.client-id}
+            client-secret: ${keycloak.client-secret}
+            client-name: ${keycloak.client-id}
+            redirect-uri: http://localhost:8888/*
+            authorization-grant-type: authorization_code
           google:
             client-id: ${google.authentication.client-id}
             client-secret: ${google.authentication.client-secret}
             authorization-grant-type: ${google.authentication.grant-type}
-      resourceserver:
+            scope:
+              - email
+              - profile
+              - openid
+        provider:
+          keycloak:
+            user-name-attribute: preferred_username
+            authorization-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/auth
+            issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
+            jwk-set-uri: ${keycloak.server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+      resource-server:
         jwt:
-          jwk-set-uri: ${google.authentication.jwk-set-uri}
-          issuer-uri: ${google.authentication.issuer-uri}
-
-  #          keycloak:
-  #            client-id: ${keycloak.client-id}
-  #            client-secret: ${keycloak.client-secret}
-  #            client-name: ${keycloak.client-id}
-  #            redirect-uri: http://localhost:8888/*
-  #            authorization-grant-type: authorization_code
-
+          issuer-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}
   batch:
     job:
       enabled: false
