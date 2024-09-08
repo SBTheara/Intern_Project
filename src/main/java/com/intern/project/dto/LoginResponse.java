@@ -7,10 +7,10 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class EmailPassResponse {
+public class LoginResponse {
 
     private String accessToken;
     private String refreshToken;
-    private String issuedAt;
-    private String expireAt;
+    private long expireAt;
+    private String tokenType;
 }

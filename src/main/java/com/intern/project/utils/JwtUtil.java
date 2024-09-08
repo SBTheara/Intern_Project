@@ -1,6 +1,6 @@
 package com.intern.project.utils;
 
-import com.intern.project.dto.EmailPassResponse;
+import com.intern.project.dto.LoginResponse;
 import com.intern.project.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -32,7 +32,7 @@ public class JwtUtil {
     return claimsResolver.apply(claims);
   }
 
-  public EmailPassResponse generateToken(User user) {
+  public LoginResponse generateToken(User user) {
 
     Map<String, Object> claims = new HashMap<>();
     claims.put("email", user.getEmail());
@@ -47,7 +47,7 @@ public class JwtUtil {
             .expiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
             .signWith(getSigningKey());
     jwt.header().type("JWT").keyId(String.valueOf(RandomUtils.nextLong()));
-    return EmailPassResponse.builder().accessToken(jwt.compact()).build();
+    return LoginResponse.builder().accessToken(jwt.compact()).build();
   }
 
   public long getExpirationTime() {

@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/order")
+@RequestMapping("/internal/v1/order")
 @RequiredArgsConstructor
 public class OrderController {
   private final OrderService orderService;

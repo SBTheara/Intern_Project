@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/v1/users")
+@RequestMapping(value = "/internal/v1/users")
 @RequiredArgsConstructor
 public class UsersController {
   private final UsersService usersService;
